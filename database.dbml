@@ -51,3 +51,11 @@ Table order_items {
   created_at timestamp
   updated_at timestamp  
 }
+
+Table warehouses {
+  id int [pk, increment]
+  name varchar [unique, not null]
+  vendor_id int
+}
+
+
