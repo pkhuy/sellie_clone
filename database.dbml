@@ -59,3 +59,19 @@ Table warehouses {
 }
 
 
+Table products {
+  id int [pk, increment]
+  name varchar [not null]
+  code varchar [unique, not null]               //gen
+  price_id int
+  current_price int
+}
+
+Table prices {
+  id int [pk, increment]
+  level_0 int
+  level_1 int
+  level_2 int
+  level_3 int
+  level_4 int 
+}
