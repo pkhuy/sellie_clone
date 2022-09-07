@@ -3,28 +3,72 @@ from flask_sqlalchemy import SQLAlchemy
 
 from datetime import datetime
 
+from models.warehouse.warehouse import warehouse
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
-class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(200), nullable=False)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+# Product move another file
 
-    def __repr__(self):
-        return '<Task %r>' % self.id
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(200), None)
+    username = db.Column(db.String(200), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.id
+
+
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.String(200))
+    category_id = db.Column(db.Integer)
+
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    img_url = db.Column(db.String(200))
+
+
+
+class Cart(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    created_by_id = db.Column(db.Integer)
+
+
+class CartItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer)
+    cart_id = db.Column(db.Integer)
+
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(200), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+
+
+class OrderItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    product_id = db.Column(db.Integer)
+    order_id = db.Column(db.Integer)
+
+
+@app.route('/login', methods=['GET'])
+def login():
+    return render_template('login.html')
 
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
         task_content = request.form['content']
-        new_task = Todo(content=task_content)
+        new_task = Product(content=task_content)
 
         try:
             db.session.add(new_task)
@@ -34,24 +78,20 @@ def index():
             return 'There was an issue adding your task'
 
     else:
-        tasks = Todo.query.order_by(Todo.date_created).all()
-        return render_template('login.html', tasks=tasks)
+        categories = Category.query.order_by(Category.id).all()
+        print("---------------", categories[0].img_url)
+        return render_template('index.html', categories=categories)
 
 
-@app.route('/delete/<int:id>')
-def delete(id):
-    task_to_delete = Todo.query.get_or_404(id)
+@app.route('/categories/<int:id>')
+def get_categories_detail(id):
+    products = Product.query.all()
+    return render_template('product-details.html', products=products)
 
-    try:
-        db.session.delete(task_to_delete)
-        db.session.commit()
-        return redirect('/')
-    except:
-        return 'There was a problem deleting that task'
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
-    task = Todo.query.get_or_404(id)
+    task = Product.query.get_or_404(id)
 
     if request.method == 'POST':
         task.content = request.form['content']
@@ -69,7 +109,7 @@ def update(id):
 def get_all_vendors():
     if request.method == 'POST':
         task_content = request.form['content']
-        new_task = Todo(content=task_content)
+        new_task = Product(content=task_content)
 
         try:
             db.session.add(new_task)
@@ -79,8 +119,8 @@ def get_all_vendors():
             return 'There was an issue adding your task'
 
     else:
-        tasks = Todo.query.order_by(Todo.date_created).all()
-        return render_template('index.html', tasks=tasks)
+        tasks = Product.query.order_by(Product.date_created).all()
+        return render_template('vendor.html', tasks=tasks, warehouse=warehouse)
 
 if __name__ == "__main__":
     app.run(debug=True)
