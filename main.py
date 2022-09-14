@@ -1,3 +1,4 @@
+from unicodedata import category
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
@@ -79,14 +80,46 @@ def index():
 
     else:
         categories = Category.query.order_by(Category.id).all()
-        print("---------------", categories[0].img_url)
         return render_template('index.html', categories=categories)
 
 
-@app.route('/categories/<int:id>')
-def get_categories_detail(id):
+@app.route('/products')
+def get_products():
     products = Product.query.all()
-    return render_template('product-details.html', products=products)
+    products = [{
+        "id": 1,
+        "name": "Piano",
+        "img_url": "",
+        "price": "$2000",
+        "description": "Some description",
+    }, {
+        "id": 1,
+        "name": "Violin",
+        "img_url": "",
+        "price": "$2000",
+        "description": "Some description",
+    }, {
+        "id": 1,
+        "name": "Organ",
+        "img_url": "",
+        "price": "$2000",
+        "description": "Some description",
+    }, {
+        "id": 1,
+        "name": "Ukulele",
+        "img_url": "",
+        "price": "$2000",
+        "description": "Some description",
+    }, {
+        "id": 1,
+        "name": "Lyre",
+        "img_url": "",
+        "price": "$2000",
+        "description": "Some description",
+    }]
+    categories = Category.query.order_by(Category.id).all()
+    category = categories[3]
+    return render_template('product.html', products=products, category=category)
 
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])

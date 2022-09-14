@@ -73,7 +73,7 @@
         <nav class="amado-nav">
             <ul>
                 <li class="active"><a href="{{ './' }}">Home</a></li>
-                <li><a href="{{ './' }}">Category</a></li>
+                <li><a href="{{ './categories' }}">Category</a></li>
                 <li><a href="{{ './products' }}">Product</a></li>
                 <li><a href="{{ './vendors' }}">Vendor</a></li>
                 <li><a href="{{ './partners' }}">Partner</a></li>
@@ -109,12 +109,12 @@
             {% for category in categories %}
             <div class="single-products-catagory clearfix">
                 <a href="{{ '/categories/%s'%category.id }}">
-                    <img src={{ category.img_url }} alt="">
+                    <img src="{{ category.img_url }}" alt="">
                     <!-- Hover Content -->
                     <div class="hover-content">
                         <div class="line"></div>
-                        <p>From $180</p>
-                        <h4>Modern Chair</h4>
+                        <p>From $200</p>
+                        <h4>{{ category.name }}</h4>
                     </div>
                 </a>
             </div>
