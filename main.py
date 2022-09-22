@@ -4,8 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from datetime import datetime
 
-from models.warehouse.warehouse import warehouse
-
+# from api import ui_bp
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
@@ -59,7 +58,7 @@ class OrderItem(db.Model):
     product_id = db.Column(db.Integer)
     order_id = db.Column(db.Integer)
 
-
+#home/category
 @app.route('/login', methods=['GET'])
 def login():
     return render_template('login.html')
@@ -81,6 +80,12 @@ def index():
     else:
         categories = Category.query.order_by(Category.id).all()
         return render_template('index.html', categories=categories)
+
+
+@app.route('/categories/<int:id>')
+def get_category_detail(id):
+    categories = Category.query.get_or_404(id)
+    return render_template('category-detail.html', category=category)
 
 
 @app.route('/products')
@@ -141,19 +146,46 @@ def update(id):
 @app.route('/vendors', methods=['POST', 'GET'])
 def get_all_vendors():
     if request.method == 'POST':
-        task_content = request.form['content']
-        new_task = Product(content=task_content)
-
-        try:
-            db.session.add(new_task)
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'There was an issue adding your task'
+        return redirect('/')
 
     else:
-        tasks = Product.query.order_by(Product.date_created).all()
-        return render_template('vendor.html', tasks=tasks, warehouse=warehouse)
+        return render_template('vendor.html')\
+
+@app.route('/partners', methods=['POST', 'GET'])
+def get_all_partners():
+    if request.method == 'POST':
+        return redirect('/')
+
+    else:
+        return render_template('partner.html')
+
+@app.route('/customers', methods=['POST', 'GET'])
+def get_all_customers():
+    if request.method == 'POST':
+        return redirect('/')
+
+    else:
+        return render_template('customer.html')
+
+
+def init_app():
+    # app.config['SECRET_KEY'] = secret_key
+    # app.register_blueprint(api_bp, url_perfix="/api/v1")
+    # app.register_blueprint(ui_bp, url_prefix="")
+    # login_manager = LoginManager(app)
+    # login_manager.login_view = 'login'
+    # login_manager.login_message_category = 'info'
+
+    # @login_manager.user_loader
+    # def load_user(user_id):
+    #     return Auth().loaded_user(user_id)
+
+    app.run()
+
+if __name__ == '__main__':
+    init_app()
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

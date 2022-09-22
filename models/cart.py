@@ -6,19 +6,19 @@ import enum
 from .base import Base
 
 
-class OrderStatus(enum.Enum):
+class CartStatus(enum.Enum):
     waiting_shipper = 1
     delivering = 2
     complete = 3
     cancel = 4
 
 
-class Order(Base):
-    __tablename__ = 'orders'
+class Cart(Base):
+    __tablename__ = 'carts'
 
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String, nullable=False)
-    status = db.Column(Enum(OrderStatus))
+    status = db.Column(Enum(CartStatus))
     created_at = db.Column(DateTime(timezone=True), server_default=func.now())
 
     def to_dict(self):
@@ -31,12 +31,12 @@ class Order(Base):
         return d
 
 
-class OrderItem(Base):
-    __tablename__ = 'orders'
+class CartItem(Base):
+    __tablename__ = 'Carts'
 
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String, nullable=False)
-    status = db.Column(Enum(OrderStatus))
+    status = db.Column(Enum(CartStatus))
     created_at = db.Column(DateTime(timezone=True), server_default=func.now())
 
     def to_dict(self):
