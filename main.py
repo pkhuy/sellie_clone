@@ -83,10 +83,22 @@ def index():
         return render_template('index.html', categories=categories)
 
 
+@app.route('/carts')
+def get_cart_detail():
+    products = Product.query.all()
+    return render_template('cart.html', products=products)
+
+
 @app.route('/categories/<int:id>')
 def get_categories_detail(id):
     products = Product.query.all()
     return render_template('product-details.html', products=products)
+
+
+@app.route('/products')
+def get_all_products():
+    products = Product.query.all()
+    return render_template('product.html', products=products)
 
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
@@ -109,18 +121,38 @@ def update(id):
 def get_all_vendors():
     if request.method == 'POST':
         task_content = request.form['content']
-        new_task = Product(content=task_content)
-
         try:
-            db.session.add(new_task)
             db.session.commit()
             return redirect('/')
         except:
             return 'There was an issue adding your task'
-
     else:
-        tasks = Product.query.order_by(Product.date_created).all()
-        return render_template('vendor.html', tasks=tasks, warehouse=warehouse)
+        return render_template('vendor.html')
+
+@app.route('/partners', methods=['POST', 'GET'])
+def get_all_partners():
+    if request.method == 'POST':
+        task_content = request.form['content']
+        try:
+            db.session.commit()
+            return redirect('/')
+        except:
+            return 'There was an issue adding your task'
+    else:
+        return render_template('partner.html')
+
+@app.route('/customers', methods=['POST', 'GET'])
+def get_all_customers():
+    if request.method == 'POST':
+        task_content = request.form['content']
+        try:
+            db.session.commit()
+            return redirect('/')
+        except:
+            return 'There was an issue adding your task'
+    else:
+        return render_template('customer.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)
