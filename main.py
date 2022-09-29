@@ -12,53 +12,6 @@ db = SQLAlchemy(app)
 # Product move another file
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(200), nullable=False)
-    password = db.Column(db.String(200), nullable=False)
-
-    def __repr__(self):
-        return '<User %r>' % self.id
-
-
-class Product(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), nullable=False)
-    description = db.Column(db.String(200))
-    category_id = db.Column(db.Integer)
-
-
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), nullable=False)
-    img_url = db.Column(db.String(200))
-
-
-
-class Cart(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    created_by_id = db.Column(db.Integer)
-
-
-class CartItem(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer)
-    cart_id = db.Column(db.Integer)
-
-
-class Order(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(200), nullable=False)
-    password = db.Column(db.String(200), nullable=False)
-
-
-class OrderItem(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), nullable=False)
-    product_id = db.Column(db.Integer)
-    order_id = db.Column(db.Integer)
-
-
 @app.route('/login', methods=['GET'])
 def login():
     return render_template('login.html')
@@ -85,7 +38,7 @@ def index():
 
 @app.route('/carts')
 def get_cart_detail():
-    products = Product.query.all()
+    cart_items = Cart
     return render_template('cart.html', products=products)
 
 
