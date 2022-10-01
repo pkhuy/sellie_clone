@@ -1,22 +1,15 @@
-from sqlalchemy.sql.sqltypes import BigInteger
-from util.postgre import db
-from sqlalchemy.sql import func
-from sqlalchemy import DateTime, Integer, String
+from datetime import date, datetime
+from flask_login import UserMixin
+from flask_bcrypt import Bcrypt
+from sqlalchemy.sql.schema import ForeignKey, Table
 from .base import Base
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+from flask_login import LoginManager
 
 
 class Category(Base):
-    __tablename__ = 'categories'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    created_at = db.Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = db.Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
+    id = Column(Integer, primary_key=True)
+    name = Column(String(200), nullable=False)
+    img_url = Column(String(200))
 
-    def to_dict(self):
-        d = {
-            "id": self.id,
-            "name": self.name,
-            "created_at": str(self.created_at),
-            "updated_at": str(self.updated_at),
-        }
-        return d
