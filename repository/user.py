@@ -1,23 +1,24 @@
 import bcrypt
-from entities.user import User
-from database.db_config import DBConnectionHandler
-from database.model import User as UserModel
+import model.user as model_user
+from .base import DBConnectionHandler
+# from database.model import model.User as model.UserModel
 from typing import List
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import text
 
+
 class UserRepository:
     @classmethod
-    def insert_user(cls, data) -> UserModel:
+    def insert_user(cls, data) -> model_user.User:
         with DBConnectionHandler() as db_connection:
             try:
                 hash_pass = bcrypt.hashpw(
                     data["password"].encode('utf-8'), bcrypt.gensalt())
-                new_user = UserModel(
+                new_user = model.UserModel(
                     name=data["name"], email=data["email"], password=hash_pass)
                 db_connection.session.add(new_user)
                 db_connection.session.commit()
-                return User(
+                return model.User(
                     id=new_user.id, name=new_user.name, email=new_user.email
                 ).get_as_json()
             except Exception as ex:
@@ -28,25 +29,24 @@ class UserRepository:
                 db_connection.session.close()
 
     @classmethod
-    def select_all(cls) -> List[User]:
+    def select_all(cls) -> List[model_user.User]:
         db_conn = DBConnectionHandler()
-        datas = db_conn.execute(text("""SELECT * FROM users"""))
+        datas = db_conn.execute(text("""SELECT * FROM model.Users"""))
         print(type(datas))
         json_datas = {}
         for data in datas:
             print(type(data))
-            json_datas[str(data.name)] = User(
+            json_datas[str(data.name)] = model_user.User(
                 data.id, data.name, data.email).get_as_json()
         return json_datas
 
-
     @classmethod
-    def select(cls, data) -> List[UserModel]:
-        
+    def select(cls, data) -> List[model_user.User]:
+
         with DBConnectionHandler() as db_connection:
             try:
                 user = (
-                    db_connection.session.query(UserModel)
+                    db_connection.session.query(model_user.UserModel)
                     .filter_by(email=str(data["email"]))
                     .one()
                 )
@@ -64,35 +64,34 @@ class UserRepository:
             finally:
                 db_connection.session.close()
 
-    @classmethod
-    def select_by_id(cls, id: int) -> User:
-        db_conn = DBConnectionHandler()
-        data = db_conn.execute(text("""SELECT * FROM users WHERE id={}""".format(id))).fetchone()
-        json_data = User(id, data.name, data.email, data.password).get_as_json()
-        return json_data
+    # @classmethod
+    # def select_by_id(cls, id: int) -> model.User:
+    #     db_conn = DBConnectionHandler()
+    #     data = db_conn.execute(text("""SELECT * FROM model.Users WHERE id={}""".format(id))).fetchone()
+    #     json_data = model.User(id, data.name, data.email, data.password).get_as_json()
+    #     return json_data
+    #
+    # @classmethod
+    # def select_by_email(cls, email: str) -> model.User:
+    #     db_conn = DBConnectionHandler()
+    #     data = db_conn.execute(
+    #         text("""SELECT * FROM model.Users WHERE email='{}'""".format(email))).fetchone()
+    #     if data is None:
+    #         return None
+    #     return model.User(id, data.name, data.email,
+    #                       data.password).get_as_json()
 
     @classmethod
-    def select_by_email(cls, email: str) -> User:
-        db_conn = DBConnectionHandler()
-        data = db_conn.execute(
-            text("""SELECT * FROM users WHERE email='{}'""".format(email))).fetchone()
-        if data is None:
-            return None        
-        return User(id, data.name, data.email,
-                         data.password).get_as_json()
-        
-
-    @classmethod
-    def loaded_user(cls, id: int) -> UserModel:
+    def loaded_user(cls, id: int) -> model_user.User:
         with DBConnectionHandler() as db_connection:
             try:
                 data = None
 
                 if id:
-                    # Select user by id
+                    # Select model.User by id
                     with DBConnectionHandler() as db_connection:
                         data = (
-                            db_connection.session.query(UserModel)
+                            db_connection.session.query(model_user.User)
                             .filter_by(id=id)
                             .one()
                         )
@@ -107,80 +106,80 @@ class UserRepository:
                 raise
             finally:
                 db_connection.session.close()
-
-    @classmethod
-    def update(cls, data) -> User:
-
-        with DBConnectionHandler() as db_connection:
-            try:
-                json_data = None
-                id = int(data["id"])
-                user=db_connection.session.query(
-                    UserModel).filter_by(id=id).one()
-                user.name = data["name"]
-                user.email = data["email"]
-                user.password = bcrypt.hashpw(
-                    data["password"].encode('utf-8'), bcrypt.gensalt())
-                db_connection.session.commit()
-
-                data = db_connection.session.query(
-                    UserModel).filter_by(id=id).one()
-                json_data = User(
-                    data.id, data.name, data.email, data.password).get_as_json()
-                return json_data
-
-            except NoResultFound:
-                return []
-            except Exception as ex:
-                db_connection.session.rollback()
-                print(ex)
-                raise
-            finally:
-                db_connection.session.close()
-
-    #Not done yet
-    @classmethod
-    def get_permission(cls, entity: str) -> UserModel:
-        with DBConnectionHandler() as db_connection:
-            try:
-                data = None
-
-                if id:
-                    # Select user by id
-                    with DBConnectionHandler() as db_connection:
-                        data = (
-                            db_connection.session.query(UserModel)
-                            .filter_by(id=id)
-                            .one()
-                        )
-
-                return data
-
-            except NoResultFound:
-                return data
-            except Exception as ex:
-                db_connection.session.rollback()
-                print(ex)
-                raise
-            finally:
-                db_connection.session.close()
-
-    @classmethod
-    def drop_row(cls, id) -> bool:
-
-        with DBConnectionHandler() as db_connection:
-            dropable = False
-            try:
-                if id:
-                    data = db_connection.session.query(
-                        UserModel).filter_by(id=id).one()
-                    db_connection.session.delete(data)
-                    db_connection.session.commit()
-            except NoResultFound:
-                return dropable
-            except Exception as ex:
-                db_connection.session.rollback()
-                print(ex)
-                raise
-            finally:
-                db_connection.session.close()
+    #
+    # @classmethod
+    # def update(cls, data) -> model.User:
+    #
+    #     with DBConnectionHandler() as db_connection:
+    #         try:
+    #             json_data = None
+    #             id = int(data["id"])
+    #             model.User = db_connection.session.query(
+    #                 model.UserModel).filter_by(id=id).one()
+    #             model.User.name = data["name"]
+    #             model.User.email = data["email"]
+    #             model.User.password = bcrypt.hashpw(
+    #                 data["password"].encode('utf-8'), bcrypt.gensalt())
+    #             db_connection.session.commit()
+    #
+    #             data = db_connection.session.query(
+    #                 model.UserModel).filter_by(id=id).one()
+    #             json_data = model.User(
+    #                 data.id, data.name, data.email, data.password).get_as_json()
+    #             return json_data
+    #
+    #         except NoResultFound:
+    #             return []
+    #         except Exception as ex:
+    #             db_connection.session.rollback()
+    #             print(ex)
+    #             raise
+    #         finally:
+    #             db_connection.session.close()
+    #
+    # # Not done yet
+    # @classmethod
+    # def get_permission(cls, entity: str) -> model.UserModel:
+    #     with DBConnectionHandler() as db_connection:
+    #         try:
+    #             data = None
+    #
+    #             if id:
+    #                 # Select model.User by id
+    #                 with DBConnectionHandler() as db_connection:
+    #                     data = (
+    #                         db_connection.session.query(model.UserModel)
+    #                         .filter_by(id=id)
+    #                         .one()
+    #                     )
+    #
+    #             return data
+    #
+    #         except NoResultFound:
+    #             return data
+    #         except Exception as ex:
+    #             db_connection.session.rollback()
+    #             print(ex)
+    #             raise
+    #         finally:
+    #             db_connection.session.close()
+    #
+    # @classmethod
+    # def drop_row(cls, id) -> bool:
+    #
+    #     with DBConnectionHandler() as db_connection:
+    #         dropable = False
+    #         try:
+    #             if id:
+    #                 data = db_connection.session.query(
+    #                     model.UserModel).filter_by(id=id).one()
+    #                 db_connection.session.delete(data)
+    #                 db_connection.session.commit()
+    #         except NoResultFound:
+    #             return dropable
+    #         except Exception as ex:
+    #             db_connection.session.rollback()
+    #             print(ex)
+    #             raise
+    #         finally:
+    #             db_connection.session.close()

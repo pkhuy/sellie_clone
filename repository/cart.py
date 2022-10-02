@@ -1,16 +1,15 @@
 import bcrypt
-from entities.user import User
-from database.db_config import DBConnectionHandler
-from database.model import User as UserModel
+from .base import DBConnectionHandler
+from model.cart import Cart as cart_model
 from typing import List
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import text
 import model
 
 
-class OrderRepository:
+class CartRepository:
     @classmethod
-    def insert_carts(cls, data) -> model.Cart:
+    def insert_carts(cls, data) -> cart_model.Cart:
         with DBConnectionHandler() as db_connection:
             try:
                 hash_pass = bcrypt.hashpw(

@@ -1,12 +1,14 @@
 from flask import Blueprint, request, render_template, flash, redirect
 from flask.json import jsonify
 from flask_login import current_user
+import service
 
-customer_api = Blueprint("customer_api", __name__)
+dashboard_api = Blueprint("dashboard_api", __name__)
 
 
-@customer_api.route('', methods=['GET', 'POST'])
-def get_all():
+@dashboard_api.route('', methods=['GET', 'POST'])
+@dashboard_api.route('/home', methods=['GET', 'POST'])
+def dashboard():
     if current_user.is_authenticated:
         if request.method == "POST":
             if not request.form["name"]:
@@ -15,17 +17,14 @@ def get_all():
                 "current_user_id": current_user.id,
                 "name": request.form["name"]
             }
-            new_group = group_service.create(json_data)
-            return render_template("response.html", context=new_group)
+            return render_template("dashboard.html")
         elif request.method == "GET":
-            groups = group_service.read_all()
-            groups["entity"] = "groups"
-            return render_template("entity.html", context=groups)
+            return render_template("dashboard.html")
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 
 
-@customer_api.route('/<int:id>', methods=['GET', 'POST', 'DELETE'])
+@dashboard_api.route('/<int:id>', methods=['GET', 'POST', 'DELETE'])
 def manage(id):
     if current_user.is_authenticated:
         if request.method == "POST":
@@ -52,3 +51,29 @@ def manage(id):
             return render_template("manage.html", context=group)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
+
+@dashboard_api.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == "POST":
+        email = request.form['email']
+        password = request.form['password']
+        if not email:
+            return 'Missing Email', 401
+        if not password:
+            return 'Missing Password', 401
+
+        res = service.Auth.login(request.form)
+
+        if res is not None:
+            login_user(res)
+            token = jwt.encode({
+                "email": request.form["email"],
+                "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=1)},
+                secret_key
+            )
+
+            return redirect('/')
+        else:
+            flash('Login Unsuccessful. Please check email and password', 'danger')
+    else:
+        return render_template('login.html')

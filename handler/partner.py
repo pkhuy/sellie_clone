@@ -2,10 +2,11 @@ from flask import Blueprint, request, render_template, flash, redirect
 from flask.json import jsonify
 from flask_login import current_user
 
-customer_api = Blueprint("customer_api", __name__)
+partner_api = Blueprint("partner_api", __name__)
 
 
-@customer_api.route('', methods=['GET', 'POST'])
+
+@partner_api.route('', methods=['GET', 'POST'])
 def get_all():
     if current_user.is_authenticated:
         if request.method == "POST":
@@ -25,7 +26,7 @@ def get_all():
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 
 
-@customer_api.route('/<int:id>', methods=['GET', 'POST', 'DELETE'])
+@partner_api.route('/<int:id>', methods=['GET', 'POST', 'DELETE'])
 def manage(id):
     if current_user.is_authenticated:
         if request.method == "POST":

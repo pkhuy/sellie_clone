@@ -1,12 +1,12 @@
 import datetime
 
 from service.auth import admin_login_required, UserAuth
-from models.user import User
-from models.listing import Listing
-from models.trigger import Trigger
-from models.order import Order
-from models.orders_sync import OrdersSync
-from models.postgres.listing_rating import ListingRating
+from model.user import User
+from model.listing import Listing
+from model.trigger import Trigger
+from model.order import Order
+from model.orders_sync import OrdersSync
+from model.postgres.listing_rating import ListingRating
 from util.postgre import db
 from blps.api.tasks.fire_triggers import LISTING_PAGE_SIZE, TRIGGER_PAGE_SIZE, DELIVERY_DAYS_OFFSET, ORDER_PAGE_SIZE
 

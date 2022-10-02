@@ -8,7 +8,7 @@ from sqlalchemy.sql.expression import text
 import model
 
 
-class OrderRepository:
+class CategoryRepository:
     @classmethod
     def insert_carts(cls, data) -> model.Cart:
         with DBConnectionHandler() as db_connection:
