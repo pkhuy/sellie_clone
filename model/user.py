@@ -7,6 +7,11 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from flask_login import LoginManager
 
+#
+# @login_manager.user_loader
+# def get_user(ident):
+#     return User.query.get(int(ident))
+
 
 class User(Base, UserMixin):
     __tablename__ = "users"

@@ -58,6 +58,7 @@ def manage(id):
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 
+
 @dashboard_api.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
