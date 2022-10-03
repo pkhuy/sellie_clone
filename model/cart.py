@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String
 
 
 class Cart(Base):
-    __tablename__ = 'cart_items'
+    __tablename__ = 'carts'
 
     id = Column(Integer, primary_key=True)
     created_by_id = Column(Integer, ForeignKey('users.id'))

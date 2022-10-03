@@ -1,10 +1,15 @@
 from flask import Blueprint, request, render_template, flash, redirect
 from flask.json import jsonify
-from flask_login import current_user
+from flask_login import current_user, login_user
+
+import repository
 import service
+import jwt
+import  datetime
 
 dashboard_api = Blueprint("dashboard_api", __name__)
 
+secret_key = 'secretaryship'
 
 @dashboard_api.route('', methods=['GET', 'POST'])
 @dashboard_api.route('/home', methods=['GET', 'POST'])
@@ -19,7 +24,8 @@ def dashboard():
             }
             return render_template("dashboard.html")
         elif request.method == "GET":
-            return render_template("dashboard.html")
+            categories = repository.CategoryRepository.get_all()
+            return render_template("dashboard.html", categories=categories)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 
@@ -61,7 +67,7 @@ def login():
             return 'Missing Email', 401
         if not password:
             return 'Missing Password', 401
-
+        print(request.form)
         res = service.Auth.login(request.form)
 
         if res is not None:

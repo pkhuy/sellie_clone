@@ -115,6 +115,7 @@ from flask.helpers import url_for
 # from service.auth import Auth
 from flask_login import current_user, LoginManager, login_user, current_user, logout_user, login_required
 from handler import api
+from service.auth import Auth
 # from https.api.auth_bp import secret_key
 
 
@@ -129,9 +130,10 @@ def init_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        return Auth().loaded_user(user_id)
+        return Auth.loaded_user(user_id)
 
     app.run()
+
 
 if __name__ == '__main__':
     init_app()

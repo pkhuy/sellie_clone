@@ -2,6 +2,8 @@ from flask import Blueprint, request, render_template, flash, redirect
 from flask.json import jsonify
 from flask_login import current_user
 
+import repository
+
 cart_api = Blueprint("cart_api", __name__)
 
 
@@ -19,9 +21,9 @@ def get_all():
             new_group = group_service.create(json_data)
             return render_template("response.html", context=new_group)
         elif request.method == "GET":
-            groups = group_service.read_all()
-            groups["entity"] = "groups"
-            return render_template("entity.html", context=groups)
+            carts = repository.CartRepository.get_carts(current_user.id)
+            cart_items = repository.CartRepository
+            return render_template("cart.html", carts=carts)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 

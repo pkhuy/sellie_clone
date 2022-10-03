@@ -1,7 +1,7 @@
 from sqlalchemy.sql.sqltypes import BigInteger
-from util.postgre import db
+
 from sqlalchemy.sql import func
-from sqlalchemy import DateTime, Integer, String, Enum
+from sqlalchemy import DateTime, Integer, String, Enum, Column
 import enum
 from .base import Base
 
@@ -16,10 +16,10 @@ class ProductStatus(enum.Enum):
 class Product(Base):
     __tablename__ =  'products'
 
-    id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String, nullable=False)
-    status = db.Column(Enum(ProductStatus))
-    created_at = db.Column(DateTime(timezone=True), server_default=func.now())
+    id = Column(Integer, primary_key=True)
+    code = Column(String, nullable=False)
+    status = Column(Enum(ProductStatus))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     def to_dict(self):
         d = {
@@ -34,10 +34,10 @@ class Product(Base):
 class ProductItem(Base):
     __tablename__ = 'Products'
 
-    id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String, nullable=False)
-    status = db.Column(Enum(ProductStatus))
-    created_at = db.Column(DateTime(timezone=True), server_default=func.now())
+    id = Column(Integer, primary_key=True)
+    code = Column(String, nullable=False)
+    status = Column(Enum(ProductStatus))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     def to_dict(self):
         d = {

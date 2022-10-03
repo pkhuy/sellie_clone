@@ -2,6 +2,8 @@ from flask import Blueprint, request, render_template, flash, redirect
 from flask.json import jsonify
 from flask_login import current_user
 
+import repository
+
 product_api = Blueprint("product_api", __name__)
 
 
@@ -16,12 +18,10 @@ def get_all():
                 "current_user_id": current_user.id,
                 "name": request.form["name"]
             }
-            new_group = group_service.create(json_data)
-            return render_template("response.html", context=new_group)
+            return render_template("product.html")
         elif request.method == "GET":
-            groups = group_service.read_all()
-            groups["entity"] = "groups"
-            return render_template("entity.html", context=groups)
+            products = repository.ProductRepository.get_all()
+            return render_template("product.html", products=products)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 

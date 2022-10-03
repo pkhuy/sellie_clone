@@ -46,11 +46,14 @@ class UserRepository:
         with DBConnectionHandler() as db_connection:
             try:
                 user = (
-                    db_connection.session.query(model_user.UserModel)
+                    db_connection.session.query(model_user.User)
                     .filter_by(email=str(data["email"]))
                     .one()
                 )
-                if bcrypt.checkpw(str(data["password"]).encode('utf-8'), user.password):
+                print(user.password)
+                print(str(data["password"]).encode('utf-8'))
+                if str(data["password"]) == user.password:
+                # if bcrypt.checkpw(str(data["password"]).encode('utf-8'), user.password):
                     return user
                 else:
                     return None

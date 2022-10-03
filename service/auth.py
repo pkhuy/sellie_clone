@@ -8,7 +8,8 @@ import repository
 
 
 class Auth:
-    # def __init__(self):
+    def __init__(self):
+        pass
 
     def check_email_existed(self, email):
         res = self.user_repository.select_by_email(email)
@@ -27,7 +28,8 @@ class Auth:
 
         return {"data": new_user}
 
-    def login(self, data):
+    @classmethod
+    def login(cls, data):
         # user = self.user_repository.select(data)
         user = repository.UserRepository.select(data)
         if user is not None:
@@ -42,5 +44,6 @@ class Auth:
             return user
         return None
 
-    def loaded_user(self, user_id):
-        return self.user_repository.loaded_user(user_id)
+    @classmethod
+    def loaded_user(cls, user_id):
+        return repository.UserRepository.loaded_user(user_id)
