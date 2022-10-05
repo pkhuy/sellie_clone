@@ -85,7 +85,7 @@ class UserRepository:
     #                       data.password).get_as_json()
 
     @classmethod
-    def loaded_user(cls, id: int) -> model_user.User:
+    def loaded_user(cls, user_id: int) -> model_user.User:
         with DBConnectionHandler() as db_connection:
             try:
                 data = None
@@ -95,7 +95,7 @@ class UserRepository:
                     with DBConnectionHandler() as db_connection:
                         data = (
                             db_connection.session.query(model_user.User)
-                            .filter_by(id=id)
+                            .filter_by(id=user_id)
                             .one()
                         )
 

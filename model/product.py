@@ -14,18 +14,24 @@ class ProductStatus(enum.Enum):
 
 
 class Product(Base):
-    __tablename__ =  'products'
+    __tablename__ = 'products'
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     code = Column(String, nullable=False)
+    price = Column(Integer, nullable=True)
+    img_url = Column(String, nullable=False)
     status = Column(Enum(ProductStatus))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    def to_dict(self):
+    def json(self):
         d = {
             "id": self.id,
             "name": self.name,
+            "code": self.code,
+            "price": self.price,
+            "img_url": self.img_url,
             "created_at": str(self.created_at),
             "updated_at": str(self.updated_at),
         }

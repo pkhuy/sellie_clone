@@ -29,10 +29,11 @@ class ProductRepository:
 
 
     @classmethod
-    def get_all(cls)  -> product_entity.Product:
+    def get_all(cls) -> product_entity.Product:
         with DBConnectionHandler() as db_connection:
             try:
                 products = db_connection.session.query(product_entity.Product).all()
+                return products
             except Exception as ex:
                 db_connection.session.rollback()
                 print(ex)

@@ -2,10 +2,9 @@ from flask import Blueprint, request, render_template, flash, redirect
 from flask.json import jsonify
 from flask_login import current_user
 
-import repository
+import service
 
 product_api = Blueprint("product_api", __name__)
-
 
 
 @product_api.route('', methods=['GET', 'POST'])
@@ -18,16 +17,16 @@ def get_all():
                 "current_user_id": current_user.id,
                 "name": request.form["name"]
             }
-            return render_template("product.html")
+            return render_template("products.html")
         elif request.method == "GET":
-            products = repository.ProductRepository.get_all()
-            return render_template("product.html", products=products)
+            products = service.Product.get_all()
+            return render_template("products.html", context=products)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 
 
-@product_api.route('/<int:id>', methods=['GET', 'POST', 'DELETE'])
-def manage(id):
+@product_api.route('/<int:product_id>', methods=['GET', 'POST', 'DELETE'])
+def get_by_id(product_id):
     if current_user.is_authenticated:
         if request.method == "POST":
             if request.form["act"] == "Update":
@@ -48,8 +47,9 @@ def manage(id):
                 })
                 return render_template("response.html", context=delete_result)
         else:
-            group = group_service.read_by_id(id)
-            group["entity"] = "groups"
-            return render_template("manage.html", context=group)
+            product = service.Product.get_by_id(product_id)
+            print(type(product))
+            print(product['product']['price'])
+            return render_template("product.html", context=product)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})

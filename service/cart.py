@@ -48,18 +48,19 @@ class Cart:
     def loaded_user(cls, user_id):
         return repository.UserRepository.loaded_user(user_id)
 
+
     @classmethod
     def get_current_cart(cls, current_user_id) -> dict:
         cart = repo.CartRepository.get_carts(current_user_id)[0]
         cart_items = repo.CartItemRepository.get_by_cart_id(cart.id)
+        cart_item_res = []
         for item in cart_items:
-            print(item.cart_id)
-            print(item.id)
-            print(item.product_id)
-            product = repo.ProductRepository.get_by_id(item.product_id.expression.foreign_keys.pop())
-            item["name"] = product.name
-            item["code"] = product.code
+            sub_res = item.json()
+            product = repo.ProductRepository.get_by_id(item.product_id)
+            sub_res["name"] = product.name
+            sub_res["code"] = product.code
+            cart_item_res.append(sub_res)
         return {
             "cart": cart,
-            "cart_items": cart_items,
+            "cart_items": cart_item_res,
         }

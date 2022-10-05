@@ -43,13 +43,13 @@
 # @app.route('/categories/<int:id>')
 # def get_categories_detail(id):
 #     products = Product.query.all()
-#     return render_template('product-details.html', products=products)
+#     return render_template('product.html', products=products)
 #
 #
 # @app.route('/products')
 # def get_all_products():
 #     products = Product.query.all()
-#     return render_template('product.html', products=products)
+#     return render_template('products.html', products=products)
 #
 #
 # @app.route('/update/<int:id>', methods=['GET', 'POST'])

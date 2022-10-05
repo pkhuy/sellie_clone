@@ -1,6 +1,6 @@
 from .auth import Auth
 from .cart import Cart
-# from .user import User
+from .product import Product
 # from .user import User
 # from .user import User
 # from .user import User
@@ -9,3 +9,4 @@ from .cart import Cart
 class Service:
     auth = Auth()
     cart = Cart()
+    product = Product()
