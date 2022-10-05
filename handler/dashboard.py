@@ -5,7 +5,7 @@ from flask_login import current_user, login_user
 import repository
 import service
 import jwt
-import  datetime
+import datetime
 
 dashboard_api = Blueprint("dashboard_api", __name__)
 

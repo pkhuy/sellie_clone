@@ -48,7 +48,7 @@ class CartItemRepository:
                 cart_items = (
                     db_connection.session.query(cart_item_entity.CartItem)
                     .filter_by(cart_id=cart_id)
-                    .all(0)
+                    .all()
                 )
                 return cart_items
 

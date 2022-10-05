@@ -1,6 +1,7 @@
 from flask import Blueprint, request, render_template, flash, redirect
 from flask.json import jsonify
 from flask_login import current_user
+import service
 
 import repository
 
@@ -18,18 +19,16 @@ def get_all():
                 "current_user_id": current_user.id,
                 "name": request.form["name"]
             }
-            new_group = group_service.create(json_data)
-            return render_template("response.html", context=new_group)
+            return render_template("cart.html")
         elif request.method == "GET":
-            carts = repository.CartRepository.get_carts(current_user.id)
-            cart_items = repository.CartRepository
-            return render_template("cart.html", carts=carts)
+            res = service.Cart.get_current_cart(current_user.id)
+            return render_template("cart.html", context=res)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 
 
-@cart_api.route('/<int:id>', methods=['GET', 'POST', 'DELETE'])
-def manage(id):
+@cart_api.route('/<int:cart_id>', methods=['GET', 'POST', 'DELETE'])
+def get_cart_items(cart_id):
     if current_user.is_authenticated:
         if request.method == "POST":
             if request.form["act"] == "Update":
@@ -50,8 +49,9 @@ def manage(id):
                 })
                 return render_template("response.html", context=delete_result)
         else:
-            group = group_service.read_by_id(id)
-            group["entity"] = "groups"
-            return render_template("manage.html", context=group)
+            if not cart_id:
+                return jsonify({"HTTP Response": 500, "content": "Internal Server"})
+
+            return render_template(".html")
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})

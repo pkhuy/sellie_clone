@@ -17,10 +17,6 @@
     <!-- Core Style CSS -->
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/core-style.css') }}">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
-
-    <!--    <link rel="stylesheet" href="css/core-style.css">-->
-    <!--    <link rel="stylesheet" href="style.css">-->
-
 </head>
 
 <body>
@@ -31,8 +27,7 @@
             <!-- Newsletter Text -->
             <div class="col-12 col-lg-6 col-xl-7">
                 <div class="newsletter-text mb-100">
-                    <h2>Subscribe for a <span>25% Discount</span></h2>
-                    <p>Nulla ac convallis lorem, eget euismod nisl. Donec in libero sit amet mi vulputate consectetur. Donec auctor interdum purus, ac finibus massa bibendum nec.</p>
+                    <h2>Subscribe for a <span>10% Discount</span></h2>
                 </div>
             </div>
             <!-- Newsletter Form -->
@@ -69,86 +64,6 @@
 </div>
 <!-- Search Wrapper Area End -->
 
-<!-- ##### Main Content Wrapper Start ##### -->
-<div class="main-content-wrapper d-flex clearfix">
-
-    <!-- Mobile Nav (max width 767px)-->
-    <div class="mobile-nav">
-        <!-- Navbar Brand -->
-        <div class="amado-navbar-brand">
-            <a href="dashboard.html"><img src="img/core-img/logo.png" alt=""></a>
-        </div>
-        <!-- Navbar Toggler -->
-        <div class="amado-navbar-toggler">
-            <span></span><span></span><span></span>
-        </div>
-    </div>
-
-    <!-- Header Area Start -->
-    <header class="header-area clearfix">
-        <!-- Close Icon -->
-        <div class="nav-close">
-            <i class="fa fa-close" aria-hidden="true"></i>
-        </div>
-        <!-- Logo -->
-        <div class="logo">
-            <a href="dashboard.html"><img src="img/core-img/logo.png" alt=""></a>
-        </div>
-        <!-- Amado Nav -->
-        <nav class="amado-nav">
-            <ul>
-                <li class="active"><a href="{{ './' }}">Home</a></li>
-                <li><a href="{{ './' }}">Category</a></li>
-                <li><a href="{{ './products' }}">Product</a></li>
-                <li><a href="{{ './vendors' }}">Vendor</a></li>
-                <li><a href="{{ './partners' }}">Partner</a></li>
-                <li><a href="{{ './customers' }}">Customer</a></li>
-            </ul>
-        </nav>
-        <!-- Button Group -->
-        <div class="amado-btn-group mt-30 mb-100">
-            <a href="#" class="btn amado-btn mb-15">%Discount%</a>
-            <a href="#" class="btn amado-btn active">New this week</a>
-        </div>
-        <!-- Cart Menu -->
-        <div class="cart-fav-search mb-100">
-            <a href="/carts" class="cart-nav"><img src="img/core-img/cart.png" alt=""> Cart <span>(0)</span></a>
-            <a href="#" class="fav-nav"><img src="img/core-img/favorites.png" alt=""> Favourite</a>
-            <a href="#" class="search-nav"><img src="img/core-img/search.png" alt=""> Search</a>
-        </div>
-        <!-- Social Button -->
-        <div class="social-info d-flex justify-content-between">
-            <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-            <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-            <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-        </div>
-    </header>
-    <!-- Header Area End -->
-
-    <!-- Product Catagories Area Start -->
-    <div class="products-catagories-area clearfix">
-        <div class="amado-pro-catagory clearfix">
-
-            <!-- Single Catagory -->
-            {% for category in categories %}
-            <div class="single-products-catagory clearfix">
-                <a href="{{ '/categories/%s'%category.id }}">
-                    <img src={{ category.img_url }} alt="">
-                    <!-- Hover Content -->
-                    <div class="hover-content">
-                        <div class="line"></div>
-                        <p>From $180</p>
-                        <h4>Modern Chair</h4>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    <!-- Product Catagories Area End -->
-</div>
-<!-- ##### Main Content Wrapper End ##### -->
 
 
 

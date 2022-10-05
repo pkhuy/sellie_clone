@@ -1,5 +1,5 @@
 from .auth import Auth
-# from .user import User
+from .cart import Cart
 # from .user import User
 # from .user import User
 # from .user import User
@@ -8,3 +8,4 @@ from .auth import Auth
 
 class Service:
     auth = Auth()
+    cart = Cart()

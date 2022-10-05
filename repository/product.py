@@ -38,4 +38,18 @@ class ProductRepository:
                 print(ex)
                 raise
             finally:
+                db_connection.session.close()\
+
+
+    @classmethod
+    def get_by_id(cls, product_id) -> product_entity.Product:
+        with DBConnectionHandler() as db_connection:
+            try:
+                product = db_connection.session.query(product_entity.Product).filter_by(id=product_id).one()
+                return product
+            except Exception as ex:
+                db_connection.session.rollback()
+                print(ex)
+                raise
+            finally:
                 db_connection.session.close()

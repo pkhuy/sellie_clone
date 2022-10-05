@@ -156,6 +156,23 @@ class CartRepository:
             finally:
                 db_connection.session.close()
 
+    # @classmethod
+    # def get_cart_items(cls, cart_id) -> cart_entity.Cart:
+    #     with DBConnectionHandler() as db_connection:
+    #         try:
+    #             data = db_connection.session.query(cart_item_entity.CartI).filter_by(cart_id=cart_id).all()
+    #
+    #             return data
+    #
+    #         except NoResultFound:
+    #             return data
+    #         except Exception as ex:
+    #             db_connection.session.rollback()
+    #             print(ex)
+    #             raise
+    #         finally:
+    #             db_connection.session.close()
+
     @classmethod
     def drop_row(cls, id) -> bool:
 

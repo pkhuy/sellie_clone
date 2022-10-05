@@ -1,5 +1,6 @@
 from .user import UserRepository
 from .cart import CartRepository
+from .cart_item import CartItemRepository
 from .category import CategoryRepository
 from .order import OrderRepository
 from .product import ProductRepository
@@ -8,9 +9,10 @@ from .user import UserRepository
 
 class Repo:
     def __init__(self):
-        # cart_repo = CartRepository
+        cart_repo = CartRepository()
+        cart_item_repo = CartItemRepository()
         # category_repo = CategoryRepository
         # order_repo = OrderRepository
         # partner_repo = CartRepository
-        # product_repo = ProductRepository
-        user_repo = UserRepository
+        product_repo = ProductRepository()
+        user_repo = UserRepository()

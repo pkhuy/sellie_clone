@@ -123,6 +123,7 @@ def init_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'secret_key'
     app.register_blueprint(api, url_perfix="/api/v1")
+    app.debug = True
     # app.register_blueprint(ui_bp, url_prefix="")
     login_manager = LoginManager(app)
     login_manager.login_view = 'login'
