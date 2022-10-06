@@ -44,10 +44,6 @@ class Cart:
             return user
         return None
 
-    @classmethod
-    def loaded_user(cls, user_id):
-        return repository.UserRepository.loaded_user(user_id)
-
 
     @classmethod
     def get_current_cart(cls, current_user_id) -> dict:
@@ -68,6 +64,7 @@ class Cart:
     @classmethod
     def add_product_to_cart(cls, cart_id, product_id, quantity) -> dict:
         product = repo.ProductRepository.get_by_id(product_id)
+        print(quantity)
         new_cart_item = repo.CartItemRepository.create_cart_item(cart_id, product_id, product.price, quantity)
         print(new_cart_item)
         current_cart = repo.CartRepository.get_by_id(cart_id)

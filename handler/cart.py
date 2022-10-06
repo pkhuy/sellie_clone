@@ -33,6 +33,7 @@ def get_cart_items(cart_id):
         if request.method == "POST":
             product_id = request.form['product_id']
             quantity = request.form['quantity']
+            print(quantity)
             res = service.Cart.add_product_to_cart(cart_id, product_id, quantity)
             # return render_template('product.html', context=res)
         else:

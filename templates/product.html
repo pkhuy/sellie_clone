@@ -125,6 +125,7 @@
                     <form action="#" method="get">
                         <input type="search" name="search" id="search" placeholder="Type your keyword...">
                         <button type="submit"><img src="img/core-img/search.png" alt=""></button>
+
                     </form>
                 </div>
             </div>
@@ -241,7 +242,10 @@
                                 <span class="color blue"></span>
                             </h5>
                             <form action="{{ '/carts/%s'%context.user_cart.id }}" method="POST">
-                                <button class="add-to-cart btn btn-default" type="submit">add to cart</button>
+                                <label> Quantity </label>
+                                <input type="text" name="quantity" placeholder="1">
+                                <input type="hidden" name="product_id" value="{{ context.product.id }}">
+                                <button class="add-to-cart btn btn-default" type="submit" name="quantity">add to cart</button>
                                 <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
                             </div>
                         </div>
