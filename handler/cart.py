@@ -31,23 +31,10 @@ def get_all():
 def get_cart_items(cart_id):
     if current_user.is_authenticated:
         if request.method == "POST":
-            if request.form["act"] == "Update":
-                if not request.form["name"]:
-                    return "Missing group name", 400
-                json_update_data = {
-                    "id": id,
-                    "name": request.form["name"],
-                    "current_user_id": current_user.id
-                }
-                update_result = group_service.update(json_update_data)
-                return render_template("response.html", context=update_result)
-            elif request.method == "DELETE":
-                delete_result = group_service.delete({
-                    "id": id,
-                    "current_user_id": current_user.id,
-                    "entity": "group"
-                })
-                return render_template("response.html", context=delete_result)
+            product_id = request.form['product_id']
+            quantity = request.form['quantity']
+            res = service.Cart.add_product_to_cart(cart_id, product_id, quantity)
+            # return render_template('product.html', context=res)
         else:
             if not cart_id:
                 return jsonify({"HTTP Response": 500, "content": "Internal Server"})

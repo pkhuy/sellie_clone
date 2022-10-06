@@ -61,6 +61,25 @@ class CartItemRepository:
             finally:
                 db_connection.session.close()
 
+
+    @classmethod
+    def create_cart_item(cls, cart_id, product_id, price, quantity) -> List[cart_item_entity.CartItem]:
+
+        with DBConnectionHandler() as db_connection:
+            try:
+                cart_item = cart_item_entity.CartItem(cart_id=cart_id, product_id=product_id, price=price,
+                                                       quantity=quantity)
+                db_connection.session.add(cart_item)
+                return cart_item
+
+            except NoResultFound:
+                return []
+            except Exception as ex:
+                db_connection.session.rollback()
+                print(ex)
+                raise
+            finally:
+                db_connection.session.close()
     # @classmethod
     # def get_by_id(cls, id: int) -> cart_entity.Cart:
     #     db_conn = DBConnectionHandler()

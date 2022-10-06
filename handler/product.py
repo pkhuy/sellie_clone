@@ -48,8 +48,10 @@ def get_by_id(product_id):
                 return render_template("response.html", context=delete_result)
         else:
             product = service.Product.get_by_id(product_id)
-            print(type(product))
-            print(product['product']['price'])
-            return render_template("product.html", context=product)
+            context = product
+            user_cart = service.Cart.get_current_cart(current_user.id)
+            print(user_cart.__getitem__('cart'))
+            context['user_cart'] = user_cart.__getitem__('cart')
+            return render_template("product.html", context=context)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})

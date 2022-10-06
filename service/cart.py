@@ -64,3 +64,12 @@ class Cart:
             "cart": cart,
             "cart_items": cart_item_res,
         }
+
+    @classmethod
+    def add_product_to_cart(cls, cart_id, product_id, quantity) -> dict:
+        product = repo.ProductRepository.get_by_id(product_id)
+        new_cart_item = repo.CartItemRepository.create_cart_item(cart_id, product_id, product.price, quantity)
+        print(new_cart_item)
+        current_cart = repo.CartRepository.get_by_id(cart_id)
+        res = cls.get_current_cart(current_cart.id)
+        return res
