@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, flash, redirect
+from flask import Blueprint, request, render_template, flash, redirect, url_for
 from flask.json import jsonify
 from flask_login import current_user
 import service
@@ -28,14 +28,19 @@ def get_all():
 
 
 @cart_api.route('/<int:cart_id>', methods=['GET', 'POST', 'DELETE'])
-def get_cart_items(cart_id):
+def cart_items(cart_id):
     if current_user.is_authenticated:
         if request.method == "POST":
             product_id = request.form['product_id']
             quantity = request.form['quantity']
             print(quantity)
-            res = service.Cart.add_product_to_cart(cart_id, product_id, quantity)
-            # return render_template('product.html', context=res)
+            user_cart = service.Cart.add_product_to_cart(cart_id, product_id, quantity)
+            product = service.Product.get_by_id(product_id)
+            context = product
+            context['user_cart'] = user_cart.__getitem__('cart')
+            # return render_template('product.html', context=context)
+            # return redirect(f'../products/{product_id}')
+            return render_template('product.html', scroll='add-to-cart')
         else:
             if not cart_id:
                 return jsonify({"HTTP Response": 500, "content": "Internal Server"})

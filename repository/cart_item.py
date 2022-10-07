@@ -67,7 +67,7 @@ class CartItemRepository:
 
         with DBConnectionHandler() as db_connection:
             try:
-                cart_item = cart_item_entity.CartItem(cart_id=cart_id, product_id=product_id, price=price,
+                cart_item = cart_item_entity.CartItem(cart_id=cart_id, product_id=product_id, customer_price=price,
                                                        quantity=quantity)
                 db_connection.session.add(cart_item)
                 return cart_item
