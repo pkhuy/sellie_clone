@@ -29,25 +29,23 @@ class Cart:
         return {"data": new_user}
 
     @classmethod
-    def login(cls, data):
+    def create_empty_cart(cls, user_id):
         # user = self.user_repository.select(data)
-        user = repository.UserRepository.select(data)
-        if user is not None:
-            token = jwt.encode({
-                "email": data["email"],
-                "exp": datetime.datetime.utcnow() + datetime.timedelta(days=1)},
-                "secretkey",
-                algorithm="HS256"
-            )
-            session["token"] = token
-            print(token)
-            return user
-        return None
+        cart = repo.CartRepository.insert_carts(data={
+            'owner_id': user_id
+        })
+        return cart
 
 
     @classmethod
     def get_current_cart(cls, current_user_id) -> dict:
-        cart = repo.CartRepository.get_carts(current_user_id)[0]
+        # will add more cart for each user
+        carts = repo.CartRepository.get_carts(current_user_id)
+        if not carts:
+            new_cart = cls.create_empty_cart(current_user_id)
+            return {
+                "cart": new_cart,
+            }
         cart_items = repo.CartItemRepository.get_by_cart_id(cart.id)
         cart_item_res = []
         for item in cart_items:
@@ -57,7 +55,7 @@ class Cart:
             sub_res["code"] = product.code
             cart_item_res.append(sub_res)
         return {
-            "cart": cart,
+            "cart": carts,
             "cart_items": cart_item_res,
         }
 

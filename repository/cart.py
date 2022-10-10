@@ -7,25 +7,20 @@ from sqlalchemy.sql.expression import text
 
 
 class CartRepository:
-    # @classmethod
-    # def insert_carts(cls, data) -> model.Cart:
-    #     with DBConnectionHandler() as db_connection:
-    #         try:
-    #             hash_pass = bcrypt.hashpw(
-    #                 data["password"].encode('utf-8'), bcrypt.gensalt())
-    #             new_user = UserModel(
-    #                 name=data["name"], email=data["email"], password=hash_pass)
-    #             db_connection.session.add(new_user)
-    #             db_connection.session.commit()
-    #             return User(
-    #                 id=new_user.id, name=new_user.name, email=new_user.email
-    #             ).get_as_json()
-    #         except Exception as ex:
-    #             db_connection.session.rollback()
-    #             print(ex)
-    #             raise
-    #         finally:
-    #             db_connection.session.close()
+    @classmethod
+    def insert_carts(cls, data) -> cart_entity.Cart:
+        with DBConnectionHandler() as db_connection:
+            try:
+                cart = cart_entity.Cart(owner_id=data['owner_id'])
+                db_connection.session.add(cart)
+                db_connection.session.commit()
+                return cart
+            except Exception as ex:
+                db_connection.session.rollback()
+                print(ex)
+                raise
+            finally:
+                db_connection.session.close()
 
     # @classmethod
     # def get_by_id(cls, id) -> model.Cart:
@@ -143,7 +138,7 @@ class CartRepository:
     def get_carts(cls, created_by_id) -> cart_entity.Cart:
         with DBConnectionHandler() as db_connection:
             try:
-                data = db_connection.session.query(cart_entity.Cart).filter_by(created_by_id=created_by_id).all()
+                data = db_connection.session.query(cart_entity.Cart).filter_by(owner_id=created_by_id).all()
 
                 return data
 
@@ -156,22 +151,25 @@ class CartRepository:
             finally:
                 db_connection.session.close()
 
-    # @classmethod
-    # def get_cart_items(cls, cart_id) -> cart_entity.Cart:
-    #     with DBConnectionHandler() as db_connection:
-    #         try:
-    #             data = db_connection.session.query(cart_item_entity.CartI).filter_by(cart_id=cart_id).all()
-    #
-    #             return data
-    #
-    #         except NoResultFound:
-    #             return data
-    #         except Exception as ex:
-    #             db_connection.session.rollback()
-    #             print(ex)
-    #             raise
-    #         finally:
-    #             db_connection.session.close()
+
+    @classmethod
+    def update_cart(cls, item_id, price, quantity) -> cart_entity.Cart:
+        with DBConnectionHandler() as db_connection:
+            try:
+                cart_item = cls.get_by_id(item_id)
+                cart_item.quantity = quantity
+                cart_item.customer_price = price
+                db_connection.session.commit()
+                return cart_item
+            except NoResultFound:
+                return None
+            except Exception as ex:
+                db_connection.session.rollback()
+                print(ex)
+                raise
+            finally:
+                db_connection.session.close()
+
 
     @classmethod
     def drop_row(cls, id) -> bool:

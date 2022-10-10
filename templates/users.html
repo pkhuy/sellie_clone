@@ -143,19 +143,19 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for partner in context.partners %}
+                            {% for user in context.users %}
                             <tr>
                                 <td class="cart_product_img">
-                                    <a href="#"><img src="img/bg-img/cart1.jpg" alt="Product"></a>
+                                    <a href="#"><img src="img/bg-img/cart1.jpg" alt="User"></a>
                                 </td>
                                 <td class="cart_product_desc">
-                                    <a href="{{ '/partners/%s'%partner.id }}">{{ partner.name }}</a>
+                                    <a href="{{ '/partners/%s'%partner.id }}">{{ user.name }}</a>
                                 </td>
                                 <td class="cart_product_desc">
-                                    <h5>{{ partner.win_rate }}</h5>
+                                    <h5>{{ user.win_rate }}</h5>
                                 </td>
                                 <td class="cart_product_desc">
-                                    <h5>{{ partner.total_order }}</h5>
+                                    <h5>{{ user.total_order }}</h5>
                                 </td>
                                 <td class="cart_product_desc">
                                     <h5>random column</h5>

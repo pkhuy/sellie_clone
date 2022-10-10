@@ -8,18 +8,73 @@ from sqlalchemy.sql.expression import text
 
 class OrderRepository:
     @classmethod
-    def insert_carts(cls, data) -> order_entity.Order:
+    def insert_order(cls, data) -> order_entity.Order:
         with DBConnectionHandler() as db_connection:
             try:
-                hash_pass = bcrypt.hashpw(
-                    data["password"].encode('utf-8'), bcrypt.gensalt())
-                new_user = order_entity.Order(
-                    name=data["name"], email=data["email"], password=hash_pass)
-                db_connection.session.add(new_user)
+                new_order = order_entity.Order(code=data['code'], cart_id=data['cart_id'], owner_id=data['owner_id'])
+                db_connection.session.add(new_order)
                 db_connection.session.commit()
-                return order_entity.Order(
-                    id=new_user.id, name=new_user.name, email=new_user.email
-                ).get_as_json()
+                return new_order
+            except Exception as ex:
+                db_connection.session.rollback()
+                print(ex)
+                raise
+            finally:
+                db_connection.session.close()
+
+
+    @classmethod
+    def get_orders(cls, owner_id) -> List[order_entity.Order]:
+        with DBConnectionHandler() as db_connection:
+            try:
+                orders = (
+                    db_connection.session.query(order_entity.Order)
+                    .filter_by(owner_id=owner_id)
+                    .all()
+                )
+                return orders
+
+            except NoResultFound:
+                return []
+            except Exception as ex:
+                db_connection.session.rollback()
+                print(ex)
+                raise
+            finally:
+                db_connection.session.close()\
+
+    @classmethod
+    def get_by_id(cls, order_id) -> order_entity.Order:
+        with DBConnectionHandler() as db_connection:
+            try:
+                order = (
+                    db_connection.session.query(order_entity.Order)
+                    .filter_by(id=order_id)
+                    .all()
+                )
+                return order
+
+            except NoResultFound:
+                return []
+            except Exception as ex:
+                db_connection.session.rollback()
+                print(ex)
+                raise
+            finally:
+                db_connection.session.close()
+
+
+    @classmethod
+    def update(cls, data) -> order_entity.Order:
+        with DBConnectionHandler() as db_connection:
+            try:
+                order = cls.get_by_id(cls, data['order_id'])
+                order.status = data['status']
+                db_connection.session.commit()
+                return order
+
+            except NoResultFound:
+                return []
             except Exception as ex:
                 db_connection.session.rollback()
                 print(ex)

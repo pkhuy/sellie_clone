@@ -7,5 +7,7 @@ class Order(Base):
     __tablename__ = 'orders'
 
     id = Column(Integer, primary_key=True)
+    code = Column(String, nullable=False)
     cart_id = Column(Integer, ForeignKey('carts.id'))
-    created_by_id = Column(Integer, ForeignKey('users.id'))
+    owner_id = Column(Integer, ForeignKey('users.id'))
+    status = Column(String)

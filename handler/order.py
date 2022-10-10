@@ -2,6 +2,8 @@ from flask import Blueprint, request, render_template, flash, redirect
 from flask.json import jsonify
 from flask_login import current_user
 
+import service
+
 order_api = Blueprint("order_api", __name__)
 
 
@@ -10,46 +12,22 @@ order_api = Blueprint("order_api", __name__)
 def get_all():
     if current_user.is_authenticated:
         if request.method == "POST":
-            if not request.form["name"]:
-                return "Missing group name", 400
-            json_data = {
-                "current_user_id": current_user.id,
-                "name": request.form["name"]
-            }
-            new_group = group_service.create(json_data)
             return render_template("response.html", context=new_group)
         elif request.method == "GET":
-            groups = group_service.read_all()
-            groups["entity"] = "groups"
-            return render_template("entity.html", context=groups)
+            orders = service.Order.get_current_user_orders(current_user.id)
+
+            return render_template("orders.html", context=orders)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 
 
-@order_api.route('/<int:id>', methods=['GET', 'POST', 'DELETE'])
-def manage(id):
+@order_api.route('/<int:order_id>', methods=['GET', 'POST', 'DELETE'])
+def get_detail(order_id):
     if current_user.is_authenticated:
         if request.method == "POST":
-            if request.form["act"] == "Update":
-                if not request.form["name"]:
-                    return "Missing group name", 400
-                json_update_data = {
-                    "id": id,
-                    "name": request.form["name"],
-                    "current_user_id": current_user.id
-                }
-                update_result = group_service.update(json_update_data)
-                return render_template("response.html", context=update_result)
-            elif request.method == "DELETE":
-                delete_result = group_service.delete({
-                    "id": id,
-                    "current_user_id": current_user.id,
-                    "entity": "group"
-                })
-                return render_template("response.html", context=delete_result)
+            return render_template("order.html")
         else:
-            group = group_service.read_by_id(id)
-            group["entity"] = "groups"
-            return render_template("manage.html", context=group)
+            order = service.Order.get_order_detail(order_id)
+            return render_template("manage.html", context=order)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})

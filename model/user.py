@@ -20,6 +20,7 @@ class User(Base, UserMixin):
     name = Column(String)
     email = Column(String, nullable=False)
     password = Column(String)
+    role_id = Column(Integer, ForeignKey('roles.id'))
 
     def __repr__(self):
         return f"{self.id}"

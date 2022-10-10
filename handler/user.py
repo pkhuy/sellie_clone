@@ -1,19 +1,30 @@
-@app.route('/', methods=['POST', 'GET'])
-def index():
+from flask import Blueprint, request, render_template, flash, redirect
+from flask.json import jsonify
+from flask_login import current_user
+
+import service
+user_api = Blueprint("user_api", __name__)
+
+
+
+
+@user_api.route('/<string:role>', methods=['POST', 'GET'])
+def get_users(role):
     if request.method == 'POST':
-        task_content = request.form['content']
-        new_task = Todo(content=task_content)
-
-        try:
-            db.session.add(new_task)
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'There was an issue adding your task'
-
+        return render_template('dashboard.html')
     else:
-        tasks = Todo.query.order_by(Todo.date_created).all()
-        return render_template('dashboard.html', tasks=tasks)
+        # customer role id = 2
+        # partner role id = 3
+        # vendor role id = 4
+        if role == 'customer':
+            res = service.User.get_users(2)
+            render_template()
+        if role == 'partner':
+            res = service.User.get_users(3)
+        if role == 'vendor':
+            res = service.User.get_users(4)
+        users = service.User.get_users()
+        return render_template('users.html', context=users)
 
 
 @app.route('/delete/<int:id>')

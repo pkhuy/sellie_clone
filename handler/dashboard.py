@@ -84,3 +84,38 @@ def login():
             flash('Login Unsuccessful. Please check email and password', 'danger')
     else:
         return render_template('login.html')
+
+
+@dashboard_api.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == "POST":
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        if password != confirm_password:
+            flash('2 password ko giong nhau', 'danger')
+        form_data = {
+            "email": email,
+            'password': password,
+        }
+        if request.form['role'] == 'customer':
+            form_data['role_id'] = 2
+        elif request.form['role'] == 'partner':
+            form_data['role_id'] = 3
+        else:
+            form_data['role_id'] = 4
+        register_res = service.Auth.register(form_data)
+        login_res = service.Auth.login(register_res['email'], register_res['password'])
+
+        if login_res is not None:
+            login_user(login_res)
+            token = jwt.encode({
+                "email": login_res['email'],
+                "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=1)},
+                secret_key
+            )
+            return redirect('/')
+        else:
+            flash('Login Unsuccessful. Please check email and password', 'danger')
+    else:
+        return render_template('login.html')

@@ -8,6 +8,5 @@ class OrderItem(Base):
 
     id = Column(Integer, primary_key=True)
     product_id = Integer, ForeignKey('products.id')
-    cart_id = Column(Integer, ForeignKey('carts.id'))
+    order_id = Column(Integer, ForeignKey('orders.id'))
     price = Column(Integer)
-    created_by_id = Column(Integer, ForeignKey('users.id'))

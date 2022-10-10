@@ -7,4 +7,4 @@ class Cart(Base):
     __tablename__ = 'carts'
 
     id = Column(Integer, primary_key=True)
-    created_by_id = Column(Integer, ForeignKey('users.id'))
+    owner_id = Column(Integer, ForeignKey('users.id'))

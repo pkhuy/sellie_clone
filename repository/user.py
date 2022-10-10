@@ -9,18 +9,12 @@ from sqlalchemy.sql.expression import text
 
 class UserRepository:
     @classmethod
-    def insert_user(cls, data) -> model_user.User:
+    def insert_user(cls, email, password, role_id) -> model_user.User:
         with DBConnectionHandler() as db_connection:
             try:
-                hash_pass = bcrypt.hashpw(
-                    data["password"].encode('utf-8'), bcrypt.gensalt())
-                new_user = model.UserModel(
-                    name=data["name"], email=data["email"], password=hash_pass)
-                db_connection.session.add(new_user)
-                db_connection.session.commit()
-                return model.User(
-                    id=new_user.id, name=new_user.name, email=new_user.email
-                ).get_as_json()
+                user = model_user.User(email=email, password=password, role_id=role_id)
+                db_connection.session.add(user)
+                return user
             except Exception as ex:
                 db_connection.session.rollback()
                 print(ex)
@@ -41,22 +35,16 @@ class UserRepository:
         return json_datas
 
     @classmethod
-    def select(cls, data) -> List[model_user.User]:
+    def get_by_role_id(cls, role_id) -> List[model_user.User]:
 
         with DBConnectionHandler() as db_connection:
             try:
-                user = (
+                users = (
                     db_connection.session.query(model_user.User)
-                    .filter_by(email=str(data["email"]))
-                    .one()
+                    .filter_by(role_id=role_id)
+                    .all()
                 )
-                print(user.password)
-                print(str(data["password"]).encode('utf-8'))
-                if str(data["password"]) == user.password:
-                # if bcrypt.checkpw(str(data["password"]).encode('utf-8'), user.password):
-                    return user
-                else:
-                    return None
+                return users
 
             except NoResultFound:
                 return []
@@ -110,6 +98,32 @@ class UserRepository:
             finally:
                 db_connection.session.close()
     #
+    @classmethod
+    def select(cls, data) -> List[model_user.User]:
+
+        with DBConnectionHandler() as db_connection:
+            try:
+                user = (
+                    db_connection.session.query(model_user.User)
+                    .filter_by(email=str(data["email"]))
+                    .one()
+                )
+                print(user.password)
+                print(str(data["password"]).encode('utf-8'))
+                if str(data["password"]) == user.password:
+                    # if bcrypt.checkpw(str(data["password"]).encode('utf-8'), user.password):
+                    return user
+                else:
+                    return None
+
+            except NoResultFound:
+                return []
+            except Exception as ex:
+                db_connection.session.rollback()
+                print(ex)
+                raise
+            finally:
+                db_connection.session.close()
     # @classmethod
     # def update(cls, data) -> model.User:
     #
