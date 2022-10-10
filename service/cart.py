@@ -46,7 +46,7 @@ class Cart:
             return {
                 "cart": new_cart,
             }
-        cart_items = repo.CartItemRepository.get_by_cart_id(cart.id)
+        cart_items = repo.CartItemRepository.get_by_cart_id(carts[0].id)
         cart_item_res = []
         for item in cart_items:
             sub_res = item.json()
