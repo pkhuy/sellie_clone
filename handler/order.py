@@ -25,6 +25,7 @@ def get_all():
 def get_detail(order_id):
     if current_user.is_authenticated:
         if request.method == "POST":
+
             return render_template("order.html")
         else:
             order = service.Order.get_order_detail(order_id)
