@@ -7,37 +7,44 @@ from sqlalchemy.sql.expression import text
 
 
 class OrderItemRepository:
-    # @classmethod
-    # def insert_carts(cls, data) -> model.Cart:
-    #     with DBConnectionHandler() as db_connection:
-    #         try:
-    #             hash_pass = bcrypt.hashpw(
-    #                 data["password"].encode('utf-8'), bcrypt.gensalt())
-    #             new_user = UserModel(
-    #                 name=data["name"], email=data["email"], password=hash_pass)
-    #             db_connection.session.add(new_user)
-    #             db_connection.session.commit()
-    #             return User(
-    #                 id=new_user.id, name=new_user.name, email=new_user.email
-    #             ).get_as_json()
-    #         except Exception as ex:
-    #             db_connection.session.rollback()
-    #             print(ex)
-    #             raise
-    #         finally:
-    #             db_connection.session.close()
+    @classmethod
+    def insert_item(cls, order_id, product_id, customer_price, quantity) -> order_item_entity.OrderItem:
+        with DBConnectionHandler() as db_connection:
+            try:
+                order_item = order_item_entity.OrderItem(order_id=order_id, product_id=product_id, customer_price=price,
+                                                      quantity=quantity)
+                db_connection.session.add(order_item)
+                db_connection.session.commit()
+                return order_item
 
-    # @classmethod
-    # def get_by_id(cls, id) -> model.Cart:
-    #     db_conn = DBConnectionHandler()
-    #     datas = db_conn.execute(text("""SELECT * FROM carts WHERE id = """))
-    #     print(type(datas))
-    #     json_datas = {}
-    #     for data in datas:
-    #         print(type(data))
-    #         json_datas[str(data.name)] = User(
-    #             data.id, data.name, data.email).get_as_json()
-    #     return json_datas
+            except NoResultFound:
+                return []
+            except Exception as ex:
+                db_connection.session.rollback()
+                print(ex)
+                raise
+            finally:
+                db_connection.session.close() \
+
+    @classmethod
+    def get_by_id(cls, item_id) -> order_item_entity.OrderItem:
+        with DBConnectionHandler() as db_connection:
+            try:
+                order_item = (
+                    db_connection.session.query(order_item_entity.OrderItem)
+                    .filter_by(id=item_id)
+                    .one()
+                )
+                return order_item
+
+            except NoResultFound:
+                return []
+            except Exception as ex:
+                db_connection.session.rollback()
+                print(ex)
+                raise
+            finally:
+                db_connection.session.close()
 
 
     @classmethod

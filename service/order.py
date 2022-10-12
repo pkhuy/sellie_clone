@@ -5,6 +5,8 @@ import jwt
 import bcrypt
 import datetime
 import repository as repo
+import service
+import model.order as order_model
 
 
 class Order:
@@ -34,3 +36,13 @@ class Order:
         return {
             'order_items': items,
         }
+
+    @classmethod
+    def create_order(cls, cart_id) -> dict:
+        cart = service.Cart.get_current_cart()
+        order = repo.OrderRepository.insert_order({
+            'code': str(datetime.now()),
+            'cart_id': cart_id,
+            'owner_id': cart['cart'].owner_id
+        })
+        return order.json()

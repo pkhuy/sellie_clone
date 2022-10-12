@@ -53,6 +53,7 @@ class Cart:
             product = repo.ProductRepository.get_by_id(item.product_id)
             sub_res["name"] = product.name
             sub_res["code"] = product.code
+            sub_res["img_url"] = product.img_url
             cart_item_res.append(sub_res)
         return {
             "cart": carts,
