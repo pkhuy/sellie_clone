@@ -25,7 +25,7 @@ def dashboard():
             return render_template("dashboard.html")
         elif request.method == "GET":
             categories = repository.CategoryRepository.get_all()
-            return render_template("dashboard.html", categories=categories)
+            return render_template("index.html", categories=categories)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 

@@ -20,7 +20,8 @@ def get_all():
             return render_template("products.html")
         elif request.method == "GET":
             products = service.Product.get_all()
-            return render_template("products.html", context=products)
+            # return render_template("products.html", context=products)
+            return render_template("shop.html", context=products)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 

@@ -10,7 +10,7 @@ cart_api = Blueprint("cart_api", __name__)
 
 
 @cart_api.route('', methods=['GET', 'POST'])
-def get_all():
+def get_current_cart():
     if current_user.is_authenticated:
         if request.method == "POST":
             if not request.form["name"]:
@@ -21,14 +21,15 @@ def get_all():
             }
             return render_template("cart.html")
         elif request.method == "GET":
-            res = service.Cart.get_current_cart(current_user.id)
-            print(res)
-            return render_template("cart.html", context=res)
+            user_cart = service.Cart.get_current_cart(current_user.id)
+            context = user_cart
+            context['user_cart'] = user_cart.__getitem__('cart')
+            return render_template("cart.html", context=context)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 
 
-@cart_api.route('/<int:cart_id>', methods=['GET', 'POST', 'DELETE'])
+@cart_api.route('/<int:cart_id>', methods=['GET', 'POST', 'DELETE', 'PUT'])
 def cart_items(cart_id):
     if current_user.is_authenticated:
         if request.method == "POST":
@@ -42,10 +43,24 @@ def cart_items(cart_id):
             # return render_template('product.html', context=context)
             # return redirect(f'../products/{product_id}')
             return render_template('product.html', scroll='add-to-cart')
+        elif request.method == "PUT":
+            user_cart = service.Cart.get_current_cart(current_user.id)
+            context = user_cart
+            context['user_cart'] = user_cart.__getitem__('cart')
+            return render_template('cart.html', context=context)
         else:
             if not cart_id:
                 return jsonify({"HTTP Response": 500, "content": "Internal Server"})
 
             return render_template(".html")
     else:
-        return jsonify({"HTTP Response": 204, "content": "U must login"})
+        return jsonify({"HTTP Response": 204, "content": "U must login"})@cart_api.route('/<int:cart_id>', methods=['GET', 'POST', 'DELETE'])
+
+
+# @cart_api.route('/<int:cart_id>', methods=['UPDATE'])
+# def update_cart(cart_id):
+#     if current_user.is_authenticated:
+#         return render_template('cart.html')
+#     else:
+#         return jsonify({"HTTP Response": 204, "content": "U must login"})
+
