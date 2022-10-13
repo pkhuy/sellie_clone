@@ -8,6 +8,7 @@ from .order import order_api
 from .partner import partner_api
 from .product import product_api
 from .vendor import vendor_api
+from .user import user_api
 
 api = Blueprint("api", __name__, static_folder="static",
                    template_folder="templates")
@@ -18,6 +19,7 @@ api.register_blueprint(order_api, url_prefix="/orders")
 api.register_blueprint(partner_api, url_prefix="/partners")
 api.register_blueprint(product_api, url_prefix="/products")
 api.register_blueprint(vendor_api, url_prefix="/vendors")
+api.register_blueprint(user_api, url_prefix="/users")
 # api.register_blueprint(user_bp, url_prefix="/api/v1/users")
 
 # ui_bp = Blueprint("ui", __name__, static_folder="static",

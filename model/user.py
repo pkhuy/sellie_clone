@@ -18,6 +18,7 @@ class User(Base, UserMixin):
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    avatar = Column(String)
     email = Column(String, nullable=False)
     password = Column(String)
     role_id = Column(Integer, ForeignKey('roles.id'))

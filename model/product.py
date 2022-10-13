@@ -1,7 +1,7 @@
 from sqlalchemy.sql.sqltypes import BigInteger
 
 from sqlalchemy.sql import func
-from sqlalchemy import DateTime, Integer, String, Enum, Column
+from sqlalchemy import DateTime, Integer, String, Enum, Column, ForeignKey
 import enum
 from .base import Base
 
@@ -21,7 +21,10 @@ class Product(Base):
     code = Column(String, nullable=False)
     price = Column(Integer, nullable=True)
     img_url = Column(String, nullable=False)
+    uom = Column(String, nullable=False)
     status = Column(Enum(ProductStatus))
+    stock = Column(Integer)
+    owner_id = Column(Integer, ForeignKey('users.id', name='owner_id'))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now())
 

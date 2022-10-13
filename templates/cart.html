@@ -59,22 +59,23 @@
 						<!-- menu start -->
 						<nav class="main-menu">
 							<ul>
-								<li class="current-list-item"><a href="#">Home</a>
-									<ul class="sub-menu">
-										<li><a href="index.html">Static Home</a></li>
-										<li><a href="index_2.html">Slider Home</a></li>
-									</ul>
+								<li class="current-list-item"><a href="./">Home</a>
+<!--									<ul class="sub-menu">-->
+<!--										<li><a href="index.html">Static Home</a></li>-->
+<!--										<li><a href="index_2.html">Slider Home</a></li>-->
+<!--									</ul>-->
 								</li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="#">Pages</a>
 									<ul class="sub-menu">
-										<li><a href="404.html">404 page</a></li>
+										<!--										<li><a href="404.html">404 page</a></li>-->
 										<li><a href="about.html">About</a></li>
-										<li><a href="cart.html">Cart</a></li>
-										<li><a href="checkout.html">Check Out</a></li>
-										<li><a href="contact.html">Contact</a></li>
-										<li><a href="news.html">News</a></li>
-										<li><a href="shop.html">Shop</a></li>
+										<li><a href="./carts">Cart</a></li>
+										<li><a href="./orders">Order</a></li>
+										<!--										<li><a href="checkout.html">Check Out</a></li>-->
+										<!--										<li><a href="contact.html">Contact</a></li>-->
+										<li><a href="./users/vendors">Vendor</a></li>
+										<li><a href="./users/customers">Customer</a></li>
 									</ul>
 								</li>
 								<li><a href="news.html">News</a>
@@ -162,14 +163,16 @@
 								</tr>
 							</thead>
 							<tbody>
+								{% for item in context.cart_items %}
 								<tr class="table-body-row">
 									<td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
-									<td class="product-image"><img src="../static/styles/assets/img/products/product-img-1.jpg" alt=""></td>
-									<td class="product-name">Strawberry</td>
-									<td class="product-price">$85</td>
+									<td class="product-image"><img src="{{ item.img_url }}" alt="Item"></td>
+									<td class="product-name">{{ item.name }}</td>
+									<td class="product-price">${{ item.customer_price }}</td>
 									<td class="product-quantity"><input type="number" placeholder="0"></td>
-									<td class="product-total">1</td>
+									<td class="product-total">{{ item.quantity }}</td>
 								</tr>
+								{% endfor %}
 								<tr class="table-body-row">
 									<td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
 									<td class="product-image"><img src="../static/styles/assets/img/products/product-img-2.jpg" alt=""></td>
@@ -217,10 +220,14 @@
 						</table>
 						<div class="cart-buttons">
 							<form action="{{ '/carts/%s'%context.user_cart.id }}" method="PUT">
-								<button type="submit" value="" name="" class="boxed-btn">Update Cart</button>
+								<button style="font-family: 'Poppins', sans-serif;
+								display: inline-block;
+								background-color: #F28123;
+								color: #fff;
+								padding: 10px 20px;
+								border-radius: 50px 50px 50px 50px;
+								transition: 0.3s;" type="submit">Update cart</button>
 							</form>
-
-							<a href="checkout.html" class="boxed-btn black">Check Out</a>
 						</div>
 					</div>
 
@@ -291,7 +298,7 @@
 					<div class="footer-box pages">
 						<h2 class="widget-title">Pages</h2>
 						<ul>
-							<li><a href="index.html">Home</a></li>
+							<li><a href="./">Home</a></li>
 							<li><a href="about.html">About</a></li>
 							<li><a href="services.html">Shop</a></li>
 							<li><a href="news.html">News</a></li>

@@ -124,35 +124,27 @@ class UserRepository:
                 raise
             finally:
                 db_connection.session.close()
-    # @classmethod
-    # def update(cls, data) -> model.User:
-    #
-    #     with DBConnectionHandler() as db_connection:
-    #         try:
-    #             json_data = None
-    #             id = int(data["id"])
-    #             model.User = db_connection.session.query(
-    #                 model.UserModel).filter_by(id=id).one()
-    #             model.User.name = data["name"]
-    #             model.User.email = data["email"]
-    #             model.User.password = bcrypt.hashpw(
-    #                 data["password"].encode('utf-8'), bcrypt.gensalt())
-    #             db_connection.session.commit()
-    #
-    #             data = db_connection.session.query(
-    #                 model.UserModel).filter_by(id=id).one()
-    #             json_data = model.User(
-    #                 data.id, data.name, data.email, data.password).get_as_json()
-    #             return json_data
-    #
-    #         except NoResultFound:
-    #             return []
-    #         except Exception as ex:
-    #             db_connection.session.rollback()
-    #             print(ex)
-    #             raise
-    #         finally:
-    #             db_connection.session.close()
+
+    @classmethod
+    def get_by_id(cls, user_id) -> model_user.User:
+
+        with DBConnectionHandler() as db_connection:
+            try:
+                user = (
+                    db_connection.session.query(model_user.User)
+                    .filter_by(id=user_id)
+                    .one()
+                )
+                return user
+
+            except NoResultFound:
+                return []
+            except Exception as ex:
+                db_connection.session.rollback()
+                print(ex)
+                raise
+            finally:
+                db_connection.session.close()
     #
     # # Not done yet
     # @classmethod

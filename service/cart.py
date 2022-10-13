@@ -41,7 +41,7 @@ class Cart:
     def get_current_cart(cls, current_user_id) -> dict:
         # will add more cart for each user
         carts = repo.CartRepository.get_carts(current_user_id)
-        if not carts:
+        if not carts or len(carts) == 0:
             new_cart = cls.create_empty_cart(current_user_id)
             return {
                 "cart": new_cart,
@@ -56,7 +56,7 @@ class Cart:
             sub_res["img_url"] = product.img_url
             cart_item_res.append(sub_res)
         return {
-            "cart": carts,
+            "cart": carts[0],
             "cart_items": cart_item_res,
         }
 

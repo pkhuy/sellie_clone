@@ -51,7 +51,7 @@
 						<!-- logo -->
 						<div class="site-logo">
 							<a href="index.html">
-								<img src="../static/styles/assets/img/logo.png" alt="">
+								<img src="" alt="">
 							</a>
 						</div>
 						<!-- logo -->
@@ -68,14 +68,14 @@
 								<li><a href="about.html">About</a></li>
 								<li><a href="#">Pages</a>
 									<ul class="sub-menu">
-										<li><a href="404.html">404 page</a></li>
+<!--										<li><a href="404.html">404 page</a></li>-->
 										<li><a href="about.html">About</a></li>
 										<li><a href="./carts">Cart</a></li>
 										<li><a href="./orders">Order</a></li>
-										<li><a href="checkout.html">Check Out</a></li>
-										<li><a href="contact.html">Contact</a></li>
-										<li><a href="news.html">News</a></li>
-										<li><a href="shop.html">Shop</a></li>
+<!--										<li><a href="checkout.html">Check Out</a></li>-->
+<!--										<li><a href="contact.html">Contact</a></li>-->
+										<li><a href="./users/vendors">Vendor</a></li>
+										<li><a href="./users/customers">Customer</a></li>
 									</ul>
 								</li>
 								<li><a href="news.html">News</a>
@@ -96,6 +96,9 @@
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="./carts"><i class="fas fa-shopping-cart"></i></a>
+										<a class="shopping-cart" href="./orders">
+											<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuEsCBYzUpT5X2nt4-brqd7XbnLVBw_5SimQ&usqp=CAU">
+										</a>
 										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 									</div>
 								</li>
@@ -136,8 +139,8 @@
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="breadcrumb-text">
-						<p>Fresh and Organic</p>
-						<h1>Shop</h1>
+						<p>No need money to start</p>
+						<h1>Product</h1>
 					</div>
 				</div>
 			</div>
@@ -193,16 +196,31 @@
 						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
 					</div>
 				</div>
+				{% for product in context.products %}
 				<div class="col-lg-4 col-md-6 text-center">
 					<div class="single-product-item">
 						<div class="product-image">
-							<a href="single-product.html"><img src="../static/styles/assets/img/products/product-img-4.jpg" alt=""></a>
+							<a href="{{ '/products/%s'%product.id }}"><img src="{{ product.img_url }}" alt="Product"></a>
 						</div>
-						<h3>Avocado</h3>
-						<p class="product-price"><span>Per Kg</span> 50$ </p>
-						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+						<h3>{{ product.name }}</h3>
+						<p class="product-price"><span>Per {{ product.uom }}</span> {{ product.price }}$ </p>
+						<form action="{{ '/carts/%s'%context.user_cart.id }}" method="POST">
+							<input type="hidden" name="product_id" value={{ product.id }}>
+							<input type="hidden" name="quantity" value=1>
+							<button style="font-family: 'Poppins', sans-serif;
+								display: inline-block;
+								background-color: #F28123;
+								color: #fff;
+								padding: 10px 20px;
+								border-radius: 50px 50px 50px 50px;
+								transition: 0.3s;" type="submit"
+									onMouseOver="this.style.color='#000'"
+									onMouseOut="this.style.color='#fff'">Add to cart</button>
+						</form>
+<!--						<a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>-->
 					</div>
 				</div>
+				{% endfor %}
 				<div class="col-lg-4 col-md-6 text-center">
 					<div class="single-product-item">
 						<div class="product-image">

@@ -21,7 +21,12 @@ def get_all():
         elif request.method == "GET":
             products = service.Product.get_all()
             # return render_template("products.html", context=products)
-            return render_template("shop.html", context=products)
+            user_cart = service.Cart.get_current_cart(current_user.id)
+            print(user_cart.__getitem__('cart'))
+            context = products
+            context['user_cart'] = user_cart.__getitem__('cart')
+            print(context['user_cart'].id)
+            return render_template("shop.html", context=context)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 
