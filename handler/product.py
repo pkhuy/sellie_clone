@@ -26,7 +26,8 @@ def get_all():
             context = products
             context['user_cart'] = user_cart.__getitem__('cart')
             print(context['user_cart'].id)
-            return render_template("shop.html", context=context)
+            categories = service.Category.get_all()
+            return render_template("shop.html", context=categories)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 

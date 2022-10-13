@@ -96,9 +96,7 @@
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="./carts"><i class="fas fa-shopping-cart"></i></a>
-										<a class="shopping-cart" href="./orders">
-											<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuEsCBYzUpT5X2nt4-brqd7XbnLVBw_5SimQ&usqp=CAU">
-										</a>
+										<a class="shopping-cart" href="./orders"><i class="fas fa-shopping-cart"></i></a>
 										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
 									</div>
 								</li>
@@ -160,7 +158,10 @@
                             <li data-filter=".strawberry">Strawberry</li>
                             <li data-filter=".berry">Berry</li>
                             <li data-filter=".lemon">Lemon</li>
-                        </ul>
+                        	{% for category in context.categories %}
+							<li data-filter=".{{ category.name }}">{{ category.name }}</li>
+							{% endfor %}
+						</ul>
                     </div>
                 </div>
             </div>

@@ -41,19 +41,15 @@ class CategoryRepository:
 
 
     @classmethod
-    def select(cls, data) -> List[category_entity.Category]:
+    def get_all(cls) -> List[category_entity.Category]:
 
         with DBConnectionHandler() as db_connection:
             try:
-                user = (
+                categories = (
                     db_connection.session.query(category_entity.Category)
-                    .filter_by(email=str(data["email"]))
-                    .one()
+                    .all()
                 )
-                if bcrypt.checkpw(str(data["password"]).encode('utf-8'), user.password):
-                    return user
-                else:
-                    return None
+                return categories
 
             except NoResultFound:
                 return []
