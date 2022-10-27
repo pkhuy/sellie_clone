@@ -56,7 +56,7 @@ class Cart:
             sub_res["img_url"] = product.img_url
             cart_item_res.append(sub_res)
         return {
-            "cart": carts[0],
+            "cart": carts[0].json(),
             "cart_items": cart_item_res,
         }
 
