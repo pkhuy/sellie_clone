@@ -151,7 +151,7 @@
 			<div class="row">
 				<div class="col-lg-8 col-md-12">
 					<div class="cart-table-wrap">
-						<form action="{{ '/carts/%s'%context.user_cart.id }}" method="POST">
+						<form action="/carts" method="POST">
 						<table class="cart-table">
 								<thead class="cart-table-head">
 								<tr class="table-head-row">
@@ -171,8 +171,8 @@
 									<td class="product-image"><img src="{{ item.img_url }}" alt="Item"></td>
 									<td class="product-name">{{ item.name }}</td>
 									<td class="product-price">${{ item.customer_price }}</td>
-									<td class="product-quantity"><input type="number" name="{{ item.id }}|quantity" placeholder="{{ item.quantity }}" value="{{ item.quantity }}"></td>
-									<td class="product-quantity"><input type="number" name="{{ item.id }}|quantity" placeholder="{{ item.quantity }}" value="{{ item.quantity }}"></td>
+									<td class="product-quantity"><input type="number" name="{{ item }}.quantity" placeholder="{{ item.quantity }}" value="{{ item.quantity }}"></td>
+									<td class="product-quantity"><input type="number" name="{{ item }}.customer_price" placeholder="{{ item.quantity }}" value="{{ item.quantity }}"></td>
 									<td class="product-total">${{ item.quantity * item.customer_price }}</td>
 								</tr>
 								{% endfor %}
@@ -215,14 +215,15 @@
 							</tbody>
 						</table>
 						<div class="cart-buttons">
-							<form action="{{ '/carts/%s'%context.user_cart.id }}" method="PUT">
+							<form action="/carts" method="POST">
+								<input type="hidden" name="action" value="update" />
 								<button style="font-family: 'Poppins', sans-serif;
 								display: inline-block;
 								background-color: #F28123;
 								color: #fff;
 								padding: 10px 20px;
 								border-radius: 50px 50px 50px 50px;
-								transition: 0.3s;" type="submit">Update cart</button>
+								transition: 0.3s;" type="submit">Update cart fake</button>
 								<script>
 									$( "select" )
 											.change(function () {
