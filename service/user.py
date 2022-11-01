@@ -56,4 +56,6 @@ class User:
     @classmethod
     def get_user_detail(cls, user_id):
         user = repo.UserRepository.get_by_id(user_id)
-        return user.json()
+        return {
+            'user': user.json()
+        }

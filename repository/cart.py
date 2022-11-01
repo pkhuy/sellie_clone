@@ -20,6 +20,7 @@ class CartRepository:
                 print(ex)
                 raise
             finally:
+                db_connection.session.expunge_all()
                 db_connection.session.close()
 
     # @classmethod
@@ -57,6 +58,7 @@ class CartRepository:
                 print(ex)
                 raise
             finally:
+                db_connection.session.expunge_all()
                 db_connection.session.close()
 
     @classmethod
@@ -65,73 +67,6 @@ class CartRepository:
         data = db_conn.execute(text("""SELECT * FROM carts WHERE id={}""".format(id))).fetchone()
         # json_data = User(id, data.name, data.email, data.password).get_as_json()
         return data
-
-    @classmethod
-    def select_by_email(cls, email: str) -> cart_entity.Cart:
-        db_conn = DBConnectionHandler()
-        data = db_conn.execute(
-            text("""SELECT * FROM users WHERE email='{}'""".format(email))).fetchone()
-        if data is None:
-            return None
-        return cart_entity.Cart(id, data.name, data.email,
-                                data.password).get_as_json()
-
-
-    @classmethod
-    def loaded_user(cls, id: int) -> cart_entity.Cart:
-        with DBConnectionHandler() as db_connection:
-            try:
-                data = None
-
-                if id:
-                    # Select user by id
-                    with DBConnectionHandler() as db_connection:
-                        data = (
-                            db_connection.session.query(cart_entity.Cart)
-                            .filter_by(id=id)
-                            .one()
-                        )
-
-                return data
-
-            except NoResultFound:
-                return data
-            except Exception as ex:
-                db_connection.session.rollback()
-                print(ex)
-                raise
-            finally:
-                db_connection.session.close()
-
-    @classmethod
-    def update(cls, data) -> cart_entity.Cart:
-
-        with DBConnectionHandler() as db_connection:
-            try:
-                json_data = None
-                id = int(data["id"])
-                user=db_connection.session.query(
-                    cart_entity.cart).filter_by(id=id).one()
-                user.name = data["name"]
-                user.email = data["email"]
-                user.password = bcrypt.hashpw(
-                    data["password"].encode('utf-8'), bcrypt.gensalt())
-                db_connection.session.commit()
-
-                data = db_connection.session.query(
-                    cart_entity.Cart).filter_by(id=id).one()
-                json_data = cart_entity.Cart(
-                    data.id, data.name, data.email, data.password).get_as_json()
-                return json_data
-
-            except NoResultFound:
-                return []
-            except Exception as ex:
-                db_connection.session.rollback()
-                print(ex)
-                raise
-            finally:
-                db_connection.session.close()
 
     #Not done yet
     @classmethod
@@ -149,6 +84,7 @@ class CartRepository:
                 print(ex)
                 raise
             finally:
+                db_connection.session.expunge_all()
                 db_connection.session.close()
 
 
@@ -168,6 +104,7 @@ class CartRepository:
                 print(ex)
                 raise
             finally:
+                db_connection.session.expunge_all()
                 db_connection.session.close()
 
 
@@ -189,4 +126,5 @@ class CartRepository:
                 print(ex)
                 raise
             finally:
+                db_connection.session.expunge_all()
                 db_connection.session.close()

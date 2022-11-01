@@ -11,15 +11,18 @@ class OrderRepository:
     def insert_order(cls, data) -> order_entity.Order:
         with DBConnectionHandler() as db_connection:
             try:
+
                 new_order = order_entity.Order(code=data['code'], cart_id=data['cart_id'], owner_id=data['owner_id'])
                 db_connection.session.add(new_order)
                 db_connection.session.commit()
+                db_connection.session.expunge_all()
                 return new_order
             except Exception as ex:
                 db_connection.session.rollback()
                 print(ex)
                 raise
             finally:
+                db_connection.session.expunge_all()
                 db_connection.session.close()
 
 
@@ -41,7 +44,8 @@ class OrderRepository:
                 print(ex)
                 raise
             finally:
-                db_connection.session.close()\
+                db_connection.session.expunge_all()
+                db_connection.session.close()
 
     @classmethod
     def get_by_id(cls, order_id) -> order_entity.Order:
@@ -50,7 +54,7 @@ class OrderRepository:
                 order = (
                     db_connection.session.query(order_entity.Order)
                     .filter_by(id=order_id)
-                    .all()
+                    .one()
                 )
                 return order
 
@@ -61,6 +65,7 @@ class OrderRepository:
                 print(ex)
                 raise
             finally:
+                db_connection.session.expunge_all()
                 db_connection.session.close()
 
 
@@ -80,4 +85,5 @@ class OrderRepository:
                 print(ex)
                 raise
             finally:
+                db_connection.session.expunge_all()
                 db_connection.session.close()

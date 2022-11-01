@@ -11,3 +11,13 @@ class Order(Base):
     cart_id = Column(Integer, ForeignKey('carts.id'))
     owner_id = Column(Integer, ForeignKey('users.id'))
     status = Column(String)
+
+
+    def json(self):
+        return {
+            'id': self.id,
+            'code': self.code,
+            'cart_id': self.cart_id,
+            'owner_id': self.owner_id,
+            'status': self.status,
+        }

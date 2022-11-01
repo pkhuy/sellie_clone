@@ -12,12 +12,13 @@ order_api = Blueprint("order_api", __name__)
 def orders():
     if current_user.is_authenticated:
         if request.method == "POST":
-            cart_id = request.form['cart_id']
-            order = service.Order.create_order(cart_id)
-            return render_template("orders.html", context=order)
+            current_cart = service.Cart.get_current_cart(current_user.id)
+            cart_id = current_cart['cart'].id
+            order = service.Order.create_order(cart_id, current_user.id)
+            return render_template("order.html", context=order)
         elif request.method == "GET":
-            orders = service.Order.get_current_user_orders(current_user.id)
-            return render_template("orders.html", context=orders)
+            res = service.Order.get_current_user_orders(current_user.id)
+            return render_template("orders.html", context=res)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 
@@ -30,6 +31,6 @@ def get_detail(order_id):
             return render_template("order.html")
         else:
             order = service.Order.get_order_detail(order_id)
-            return render_template("manage.html", context=order)
+            return render_template("order.html", context=order)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})

@@ -11,6 +11,15 @@ product_api = Blueprint("product_api", __name__)
 def get_all():
     if current_user.is_authenticated:
         if request.method == "POST":
+            data = {
+                "name": request.form['name'],
+                "code": request.form['code'],
+                "price": request.form['price'],
+                "img_url": request.form['img_url'],
+                "uom": request.form['uom'],
+                "stock": request.form['stock'],
+                "owner_id": current_user.id
+            }
             if not request.form["name"]:
                 return "Missing group name", 400
             json_data = {
@@ -27,7 +36,8 @@ def get_all():
             context['user_cart'] = user_cart.__getitem__('cart')
             print(context['user_cart'].id)
             categories = service.Category.get_all()
-            return render_template("shop.html", context=categories)
+            context['categories'] = categories['categories']
+            return render_template("shop.html", context=context)
     else:
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 

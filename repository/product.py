@@ -8,18 +8,21 @@ from sqlalchemy.sql.expression import text
 
 class ProductRepository:
     @classmethod
-    def insert_carts(cls, data) -> product_entity.Product:
+    def insert(cls, data) -> product_entity.Product:
         with DBConnectionHandler() as db_connection:
             try:
-                hash_pass = bcrypt.hashpw(
-                    data["password"].encode('utf-8'), bcrypt.gensalt())
-                new_user = product_entity.Product(
-                    name=data["name"], email=data["email"], password=hash_pass)
-                db_connection.session.add(new_user)
+                product = product_entity.Product(
+                    name=data['name'],
+                    code=data['code'],
+                    price=data['price'],
+                    img_url=data['img_url'],
+                    uom=data['uom'],
+                    stock=data['stock'],
+                    owner_id=data['owner_id'],
+                )
+                db_connection.session.add(product)
                 db_connection.session.commit()
-                return product_entity.Product(
-                    id=new_user.id, name=new_user.name, email=new_user.email
-                ).get_as_json()
+                return product
             except Exception as ex:
                 db_connection.session.rollback()
                 print(ex)

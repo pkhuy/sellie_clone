@@ -26,7 +26,8 @@ class CartItemRepository:
                 print(ex)
                 raise
             finally:
-                db_connection.session.close()\
+                db_connection.session.expunge_all()
+                db_connection.session.close()
 
 
     @classmethod
@@ -47,6 +48,7 @@ class CartItemRepository:
                 print(ex)
                 raise
             finally:
+                db_connection.session.expunge_all()
                 db_connection.session.close()
 
 
@@ -68,7 +70,8 @@ class CartItemRepository:
                 print(ex)
                 raise
             finally:
-                db_connection.session.close()\
+                db_connection.session.expunge_all()
+                db_connection.session.close()
 
 
     @classmethod
@@ -87,5 +90,6 @@ class CartItemRepository:
                 print(ex)
                 raise
             finally:
+                db_connection.session.expunge_all()
                 db_connection.session.close()
 

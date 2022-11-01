@@ -28,3 +28,13 @@ class User(Base, UserMixin):
 
     def get_id(self):
         return self.id
+
+    def json(self):
+        d = {
+            "id": self.id,
+            "name": self.name,
+            "avatar": self.avatar,
+            "email": self.email,
+            "role_id": self.role_id,
+        }
+        return d

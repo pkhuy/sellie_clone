@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, flash, redirect
 from flask.json import jsonify
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, login_required, logout_user
 
 import repository
 import service
@@ -24,10 +24,9 @@ def dashboard():
             }
             return render_template("dashboard.html")
         elif request.method == "GET":
-            categories = repository.CategoryRepository.get_all()
-            return render_template("index.html", categories=categories)
+            return render_template("index.html", context={'user_id': current_user.id})
     else:
-        return jsonify({"HTTP Response": 204, "content": "U must login"})
+        return redirect('./login')
 
 
 @dashboard_api.route('/<int:id>', methods=['GET', 'POST', 'DELETE'])
@@ -119,3 +118,9 @@ def register():
             flash('Login Unsuccessful. Please check email and password', 'danger')
     else:
         return render_template('login.html')
+
+@dashboard_api.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect('./login')
