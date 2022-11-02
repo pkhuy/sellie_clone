@@ -171,8 +171,8 @@
 									<td class="product-image"><img src="{{ item.img_url }}" alt="Item"></td>
 									<td class="product-name">{{ item.name }}</td>
 									<td class="product-price">${{ item.customer_price }}</td>
-									<td class="product-quantity"><input type="number" name="{{ item }}.quantity" placeholder="{{ item.quantity }}" value="{{ item.quantity }}"></td>
-									<td class="product-quantity"><input type="number" name="{{ item }}.customer_price" placeholder="{{ item.quantity }}" value="{{ item.quantity }}"></td>
+									<td class="product-quantity"><input type="number" name="cart_items|{{ item.id }}|quantity" placeholder="{{ item.quantity }}" value="{{ item.quantity }}"></td>
+									<td class="product-quantity"><input type="number" name="cart_items|{{ item.id }}|customer_price" placeholder="{{ item.quantity }}" value="{{ item.quantity }}"></td>
 									<td class="product-total">${{ item.quantity * item.customer_price }}</td>
 								</tr>
 								{% endfor %}

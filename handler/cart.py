@@ -37,10 +37,10 @@ def get_current_cart():
                     }
                 ]
                 for input_value in request.form:
-                    if '.quantity' not in input_value:
-                        continue
-                    print()
-                    print(request.form[input_value])
+                    if '|' in input_value:
+                        elem = input_value.split('|')
+                        entity, entity_id, entity_attribute = elem[0], elem[1], elem[2]
+                        print(elem)
                 user_cart = service.Cart.get_current_cart(current_user.id)
                 context = user_cart
                 context['user_cart'] = user_cart.__getitem__('cart')
