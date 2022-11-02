@@ -18,4 +18,10 @@ class CartItem(Base):
 
 
     def json(self):
-        return self.__dict__
+        return {
+            "id": self.id,
+            "product_id": self.product_id,
+            "cart_id": self.cart_id,
+            "customer_price": self.customer_price,
+            "quantity": self.quantity
+        }

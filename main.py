@@ -113,6 +113,7 @@ import os
 from flask import Flask, flash, request, jsonify, render_template, redirect
 from flask.helpers import url_for
 # from service.auth import Auth
+from flask_cors import CORS
 from flask_login import current_user, LoginManager, login_user, current_user, logout_user, login_required
 from handler import api
 from service.auth import Auth
@@ -122,6 +123,7 @@ from service.auth import Auth
 def init_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'secret_key'
+    CORS(app)
     app.register_blueprint(api, url_perfix="/api/v1")
     app.debug = True
     # app.register_blueprint(ui_bp, url_prefix="")
