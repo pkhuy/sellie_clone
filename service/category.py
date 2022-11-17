@@ -15,9 +15,11 @@ class Category:
     @staticmethod
     def get_all():
         categories = repo.CategoryRepository.get_all()
-        return {
-            "categories": categories,
-        }
+        res = []
+        for category in categories:
+            cat_json = category.json()
+            res.append(cat_json)
+        return res
 
     @staticmethod
     def get_by_id(product_id):

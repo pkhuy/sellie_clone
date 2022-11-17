@@ -159,6 +159,7 @@
 									<th class="product-image">Product Image</th>
 									<th class="product-name">Name</th>
 									<th class="product-price">Price</th>
+									<th class="product-price">Customer price</th>
 									<th class="product-quantity">Quantity</th>
 									<th class="product-total">Total</th>
 								</tr>
@@ -167,7 +168,7 @@
 								{% for item in context.cart_items %}
 								<input type="hidden" name="{{ item }}" value="{{ item.product_id }}" />
 								<tr class="table-body-row">
-									<td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
+									<td class="product-remove"><a href=".carts/{{ context.user_cart.id }}/cart_items/{{ item.id }}"><i class="far fa-window-close"></i></a></td>
 									<td class="product-image"><img src="{{ item.img_url }}" alt="Item"></td>
 									<td class="product-name">{{ item.name }}</td>
 									<td class="product-price">${{ item.customer_price }}</td>

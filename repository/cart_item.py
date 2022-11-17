@@ -9,7 +9,6 @@ from sqlalchemy.sql.expression import text
 class CartItemRepository:
     @classmethod
     def get_by_cart_id(cls, cart_id) -> List[cart_item_entity.CartItem]:
-
         with DBConnectionHandler() as db_connection:
             try:
                 cart_items = (

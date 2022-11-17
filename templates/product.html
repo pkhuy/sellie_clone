@@ -242,19 +242,13 @@
                                 <span class="color blue"></span>
                             </h5>
                             <div id="add-to-cart">
-                                <form action="{{ '/carts/%s'%context.user_cart.id }}" method="POST">
+                                <form action="./carts" method="POST">
                                     <label> Quantity </label>
-                                    <input type="text" name="quantity" placeholder="1">
-                                    <input type="hidden" name="product_id" value="{{ context.product.id }}">
+                                    <input type="number" name="quantity" placeholder="1" value="1" />
+                                    <input type="hidden" name="product_id" value="{{ context.product.id }}" />
+                                    <input type="hidden" name="action" value="add_product" />
                                     <button class="add-to-cart btn btn-default" type="submit" name="quantity">add to cart</button>
                                     <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
-                                    {% if scroll %}
-                                    <script>
-                                        document.getElementById('{{ scroll }}').scrollIntoView();
-                                        // or
-                                        // document.location.hash = '#' + '{{ scroll }}';
-                                    </script>
-                                    {% endif %}
                                 </form>
 
                             </div>
@@ -278,24 +272,6 @@
                     Description More
                 </div>
             </div>
-<!--            &lt;!&ndash; Single Catagory &ndash;&gt;-->
-<!--            <div class="single-products-catagory clearfix">-->
-<!--                <a href="{{ '/products/%s'%context.product.id }}">-->
-<!--                    <img src={{ context.product.img_url }} alt="Product">-->
-<!--                    &lt;!&ndash; Hover Content &ndash;&gt;-->
-<!--                    <div class="hover-content">-->
-<!--                        <div class="line"></div>-->
-<!--                        <p>From {{ context.product.price }}</p>-->
-<!--                        <h4>{{ context.product.name }}</h4>-->
-<!--                    </div>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--            <div class="single-products-catagory-update-field">-->
-<!--                <div>{{ context.product.price }}</div>-->
-<!--                <div>Attribute 1</div>-->
-<!--                <div>Attribute 2</div>-->
-<!--                <div>{{ context.product.price }}</div>-->
-<!--            </div>-->
         </div>
     </div>
     <!-- Product Catagories Area End -->

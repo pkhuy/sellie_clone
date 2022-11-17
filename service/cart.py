@@ -62,10 +62,17 @@ class Cart:
 
     @classmethod
     def add_product_to_cart(cls, cart_id, product_id, quantity) -> dict:
+        existed_items = repo.CartItemRepository.get_by_cart_id(cart_id)
+        print(existed_items)
+        print("why")
+        for item in existed_items:
+            if item.product_id == product_id:
+                repo.CartItemRepository.update_cart_item(item.id, item.customer_price, item.quantity + quantity)
+                print("in")
+                res = cls.get_current_cart(cart_id)
+                return res
         product = repo.ProductRepository.get_by_id(product_id)
-        print(quantity)
-        new_cart_item = repo.CartItemRepository.create_cart_item(cart_id, product_id, product.price, quantity)
-        print(new_cart_item)
+        repo.CartItemRepository.create_cart_item(cart_id, product_id, product.price, quantity)
         current_cart = repo.CartRepository.get_by_id(cart_id)
         res = cls.get_current_cart(current_cart.id)
         return res

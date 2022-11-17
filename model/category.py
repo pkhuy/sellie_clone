@@ -15,3 +15,9 @@ class Category(Base):
     name = Column(String(200), nullable=False)
     img_url = Column(String(200))
 
+    def json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'img_url': self.img_url
+        }

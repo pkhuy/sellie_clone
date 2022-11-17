@@ -14,9 +14,10 @@ class Product:
     @staticmethod
     def get_all():
         products = repo.ProductRepository.get_all()
-        return {
-            "products": products,
-        }
+        res = []
+        for product in products:
+            res.append(product.json())
+        return res
 
     @staticmethod
     def get_by_id(product_id):

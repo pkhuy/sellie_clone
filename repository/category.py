@@ -7,25 +7,21 @@ from sqlalchemy.sql.expression import text
 
 
 class CategoryRepository:
-    @classmethod
-    def insert_carts(cls, data) -> category_entity.Category:
-        with DBConnectionHandler() as db_connection:
-            try:
-                hash_pass = bcrypt.hashpw(
-                    data["password"].encode('utf-8'), bcrypt.gensalt())
-                new_user = category_entity.Category(
-                    name=data["name"], email=data["email"], password=hash_pass)
-                db_connection.session.add(new_user)
-                db_connection.session.commit()
-                return category_entity.Category(
-                    id=new_user.id, name=new_user.name, email=new_user.email
-                ).get_as_json()
-            except Exception as ex:
-                db_connection.session.rollback()
-                print(ex)
-                raise
-            finally:
-                db_connection.session.close()
+    # @classmethod
+    # def get_all(cls) -> category_entity.Category:
+    #     with DBConnectionHandler() as db_connection:
+    #         try:
+    #             categories = (
+    #                 db_connection.session.query(category_entity.Category)
+    #                 .all()
+    #             )
+    #             return ca
+    #         except Exception as ex:
+    #             db_connection.session.rollback()
+    #             print(ex)
+    #             raise
+    #         finally:
+    #             db_connection.session.close()
 
     # @classmethod
     # def get_by_id(cls, id) -> model.Cart:
