@@ -6,7 +6,7 @@ export default class Product extends Component {
 		return (
 			<div id='productContainer'>
 				<div id='productImageContainer'>
-					<img id='productImage' src={this.props.product.image} alt='Product'/>
+					<img id='productImage' src={this.props.product.img_url} alt='Product'/>
 				</div>
 				<div id='productTitle'>
 					<p>{this.props.product.title}</p>

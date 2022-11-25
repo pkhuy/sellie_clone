@@ -13,7 +13,7 @@ export default class Header extends Component {
 						<div className='burgerSlice'></div>
 						<div className='burgerSlice'></div>
 					</div>
-					<div id='logo'><Link to='/'>Raihan Store</Link></div>
+					<div id='logo'><Link to='/'>Huy Sellie</Link></div>
 				</div>
 				<div id='headerSearchFormContainer'>
 					<SearchForm
@@ -30,7 +30,14 @@ export default class Header extends Component {
 						<span id='cartCounter'>{this.props.totalCartItem}</span>
 					</div>
 				</div>
-				<div id='signIn'>SIGN IN</div>
+				<div id='signIn'>
+					<div id='cartIconContainer'>
+						<i
+							onClick={this.props.Lo}
+							id='login'
+						>Login</i>
+					</div>
+				</div>
 			</div>
 		);
 	}

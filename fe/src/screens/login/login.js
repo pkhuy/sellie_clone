@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './homescreenstyle.css';
+import './login.css';
 import Header from '../../components/header/headerview';
 import SideBar from '../../components/sidebar/sidebarview';
 import Body from '../../components/body/bodyview';
@@ -7,9 +7,8 @@ import ShoppingCart from '../../components/shoppingcart/shoppingcartview';
 import ApiConnector from '../../api/apiconnector';
 import ApiEndpoints from '../../api/apiendpoints';
 import QueryParam from '../../api/apiqueryparams';
-import ServerURL from '../../lib/serverurl';
 
-export default class HomeScreen extends Component {
+export default class Login extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -27,10 +26,6 @@ export default class HomeScreen extends Component {
 
 	toggleShoppingCart = () => {
 		this.setState({isShowShoppingCart: !this.state.isShowShoppingCart});
-	}
-
-	redicrectLoginPage = () => {
-		this.window.location.replace(ServerURL + ApiEndpoints.LOGIN_URL)
 	}
 
 	productSuccessHandler = (products) => {
@@ -104,30 +99,11 @@ export default class HomeScreen extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<Header
-					toggleSidebar={this.toggleSidebar}
-					toggleShoppingCart={this.toggleShoppingCart}
-					totalCartItem={this.state.totalCartItem}
-					productSearchHandler={this.productSearchHandler}
-				/>
-				<div id='bodyContainer'>
-					<SideBar
-						isShowSidebar={this.state.isShowSidebar}
-						productSearchHandler={this.productSearchHandler}
-					/>
-					<Body
-						products={this.state.products.products}
-						addToCartHandler={this.addToCartHandler}
-						isShowSidebar={this.state.isShowSidebar}
-						isShowShoppingCart={this.state.isShowShoppingCart}
-					/>
-					<ShoppingCart
-						isShowShoppingCart={this.state.isShowShoppingCart}
-						cart={this.state.cart}
-						products={this.state.products.products}
-						setProductQuantityToCart={this.setProductQuantityToCart}
-						productRemoveHandler={this.productRemoveHandler}
-					/>
+				<div>
+					Email
+				</div>
+				<div>
+					Password
 				</div>
 			</React.Fragment>
 		);

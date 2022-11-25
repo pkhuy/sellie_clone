@@ -1,6 +1,7 @@
 const AppPath = {
 	HOME: '/',
-	CATEGORY: '/c/:categoryId'
+	CATEGORY: '/c/:categoryId',
+	LOGIN: '/login'
 };
 
 export default AppPath;
