@@ -1,65 +1,54 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 import './sidebarstyle.css';
-import ApiConnector from '../../api/apiconnector';
-import ApiEndpoints from '../../api/apiendpoints';
+// import ApiConnector from '../../api/apiconnector';
+// import ApiEndpoints from '../../api/apiendpoints';
 import CategorySkeleton from '../skeleton/category/categoryskeletonview';
 import SearchForm from '../form/searchform/searchformview';
 
-export default class SideBar extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			categories: {
-				categories: []
+export default function SideBar({ setIsShowSidebar }) {
+	var isShowSidebar = false
+	const state = {
+		'categories': [
+			{
+				'key': 1,
+				'name': 'technology'
 			}
-		};
+		]
 	}
 
-	getSidebarStyle = () => {
-		return !this.props.isShowSidebar ? {left: '-200px'} : {};
-	}
+	var sidebarStyle =  !isShowSidebar ? {left: '-200px'} : {};
+	var sidebarShow = sidebarStyle === {} ? true : false 
+	setIsShowSidebar(sidebarShow)
 
-	getCategoryLink = (categoryId) => `/c/${categoryId}`;
+	const getCategoryLink = (categoryId) => `/c/${categoryId}`;
 
-	categorySuccessHandler = (categories) => {
-		this.setState({categories: categories});
-	}
+	// const categorySuccessHandler = (categories) => {
+	// 	setState({state: categories});
+	// }
 
-	errorHandler = (error) => {console.error(error)} //TODO:show error right below of header
+	console.log(state.categories);
+	return (
+		<div id='sideBarContainer' style={sidebarStyle}>
+			<div id='sideBarBody'>
+				{state.categories.length > 0 ?
+					<ul>
+						<li id='sideBarSearchContainer'>
+							<SearchForm
+								// productSearchHandler={this.props.productSearchHandler}
+							/>
+						</li>
 
-	componentDidMount() {
-		ApiConnector.sendRequest(
-			ApiEndpoints.CATEGORY_URL,
-			this.categorySuccessHandler,
-			this.errorHandler
-		);
-	}
-
-	render() {
-		console.log(this.state.categories);
-		return (
-			<div id='sideBarContainer' style={this.getSidebarStyle()}>
-				<div id='sideBarBody'>
-					{this.state.categories.categories.length > 0 ?
-						<ul>
-							<li id='sideBarSearchContainer'>
-								<SearchForm
-									productSearchHandler={this.props.productSearchHandler}
-								/>
-							</li>
-
-							{this.state.categories.categories.map((category) => (
-								<Link key={category.id} to={this.getCategoryLink(category.id)}>
-									<li>{category.name}</li>
-								</Link>
-							))}
-						</ul>
-						:
-						<CategorySkeleton />
-					}
-				</div>
+						{state.categories.map((category) => (
+							<Link key={category.id} to={getCategoryLink(category.id)}>
+								<li>{category.name}</li>
+							</Link>
+						))}
+					</ul>
+					:
+					<CategorySkeleton />
+				}
 			</div>
-		);
-	}
+		</div>
+	);
 }

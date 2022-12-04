@@ -1,6 +1,7 @@
 from flask import Blueprint, request, render_template, flash, redirect
 from flask.json import jsonify
 from flask_login import current_user, login_user, login_required, logout_user
+from flask_cors import cross_origin
 
 import repository
 import service
@@ -58,31 +59,37 @@ def manage(id):
         return jsonify({"HTTP Response": 204, "content": "U must login"})
 
 
-@dashboard_api.route('/login', methods=['GET', 'POST'])
+@dashboard_api.route('/login', methods=['POST', 'GET', 'OPTION'])
 def login():
     if request.method == "POST":
-        email = request.form['email']
-        password = request.form['password']
+        email = request.json['username']
+        password = request.json['password']
         if not email:
             return 'Missing Email', 401
         if not password:
             return 'Missing Password', 401
-        print(request.form)
-        res = service.Auth.login(request.form)
+        res = service.Auth.login({
+            "email": email,
+            "password": password
+        })
 
         if res is not None:
             login_user(res)
             token = jwt.encode({
-                "email": request.form["email"],
+                "email": email,
                 "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=1)},
                 secret_key
             )
 
-            return redirect('/')
+            return jsonify({
+                "token":  "otoke"
+            })
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     else:
-        return render_template('login.html')
+        return {
+            "token": "otoke"
+        }
 
 
 @dashboard_api.route('/register', methods=['GET', 'POST'])

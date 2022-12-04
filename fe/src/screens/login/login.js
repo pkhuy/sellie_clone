@@ -1,111 +1,51 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import './login.css';
-import Header from '../../components/header/headerview';
-import SideBar from '../../components/sidebar/sidebarview';
-import Body from '../../components/body/bodyview';
-import ShoppingCart from '../../components/shoppingcart/shoppingcartview';
-import ApiConnector from '../../api/apiconnector';
-import ApiEndpoints from '../../api/apiendpoints';
-import QueryParam from '../../api/apiqueryparams';
 
-export default class Login extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isShowSidebar: true,
-			isShowShoppingCart: false,
-			products: {},
-			cart: {},
-			totalCartItem: 0
-		}
-	}
-
-	toggleSidebar = () => {
-		this.setState({isShowSidebar: !this.state.isShowSidebar});
-	}
-
-	toggleShoppingCart = () => {
-		this.setState({isShowShoppingCart: !this.state.isShowShoppingCart});
-	}
-
-	productSuccessHandler = (products) => {
-		this.setState({products: products});
-	}
-
-	erorHandler = (error) => {console.error(error)} //TODO:show error right below of header
-
-	getCategoryId = (props) => {
-		return props.match ? props.match.params.categoryId : null;
-	}
-
-	getProductEndpoint = (searchKeyword) => {
-		let categoryId = this.getCategoryId(this.props);
-		let endPoint = ApiEndpoints.PRODUCT_URL;
-		if (searchKeyword) {
-			return endPoint + '?'+ QueryParam.SEARCH + '=' + searchKeyword;
-		}
-		if (categoryId) {
-			return endPoint + '?'+ QueryParam.CATEGORY_ID + '=' + categoryId;
-		}
-		return endPoint;
-	}
-
-	fetchProducts = (searchKeyword=null) => {
-		ApiConnector.sendRequest(
-			this.getProductEndpoint(searchKeyword),
-			this.productSuccessHandler,
-			this.erorHandler
-		);
-	}
-
-	componentDidUpdate(prevProps) {
-		let catId = this.getCategoryId(this.props);
-		let prevCatId = this.getCategoryId(prevProps);
-		if (catId !== prevCatId) {
-			this.fetchProducts();
-		}
-	}
-
-	componentDidMount() {
-		this.fetchProducts();
-	}
-
-	productSearchHandler = (searchKeyword) => {
-		this.fetchProducts(searchKeyword);
-	}
-
-	getTotalCartItem = () => {
-		return Object.values(this.state.cart).length;
-	}
-
-	addToCartHandler = (product) => {
-		let cart = this.state.cart;
-		cart[product.id] = {product: product, quantity: 1};
-		this.setState({cart: cart, totalCartItem: this.getTotalCartItem()});
-	}
-
-	setProductQuantityToCart = (productId, quantity) => {
-		let cart = this.state.cart;
-		cart[productId].quantity = quantity;
-		this.setState({cart: cart});
-	}
-
-	productRemoveHandler = (productId) => {
-		let cart = this.state.cart;
-		delete cart[productId];
-		this.setState({cart: cart, totalCartItem: this.getTotalCartItem()});
-	}
-
-	render() {
-		return (
-			<React.Fragment>
-				<div>
-					Email
-				</div>
-				<div>
-					Password
-				</div>
-			</React.Fragment>
-		);
-	}
+async function loginUser(credentials) {
+ return fetch('http://127.0.0.1:5000/api/v1/login', {
+   method: 'POST',
+   headers: {
+     'Content-Type': 'application/json'
+   },
+   body: JSON.stringify(credentials)
+ })
+   .then(data => data.json())
 }
+
+export default function Login({ setToken }) {
+  const [username, setUserName] = useState();
+  const [password, setPassword] = useState();
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const token = await loginUser({
+      username,
+      password
+    });
+    setToken(token);
+  }
+
+  return(
+    <div className="login-wrapper">
+      <h1>Please Log In</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          <p>Username</p>
+          <input type="text" onChange={e => setUserName(e.target.value)} />
+        </label>
+        <label>
+          <p>Password</p>
+          <input type="password" onChange={e => setPassword(e.target.value)} />
+        </label>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+Login.propTypes = {
+  setToken: PropTypes.func.isRequired
+};

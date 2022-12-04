@@ -36,7 +36,6 @@ class User:
                 algorithm="HS256"
             )
             session["token"] = token
-            print(token)
             return user
         return None
 
