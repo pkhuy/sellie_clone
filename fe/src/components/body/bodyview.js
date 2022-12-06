@@ -1,37 +1,53 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import './bodystyle.css'
 import Product from '../product/productview';
 import ProductSkeleton from '../skeleton/product/productskeletonview';
+import ApiEndpoints from '../../api/apiendpoints';
 
-export default class Body extends Component {
-	getBodyStyle = () => {
-		return this.props.isShowSidebar ? {marginLeft: '230px'} : {};
+
+async function GetPopularProducts() {
+    let res = await fetch(ApiEndpoints.PRODUCT_URL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(data => data.json())
+	  return res
+   }
+
+export default function Body() {
+	const getBodyStyle = () => {
+		return true ? {marginLeft: '230px'} : {};
 	}
 
-	getBodyStyleClass = () => {
-		return this.props.isShowShoppingCart ?
+	const getBodyStyleClass = () => {
+		return true ?
 			'bodyContainer bodyContainerWithCart' : 'bodyContainer';
 	}
+	const [products, setProducts] = useState()
+	var productsRes = GetPopularProducts()
+	productsRes.then(function(result) {
+		console.log(result) // "Some User token"
+		setProducts(result)
+	 })
+	 console.log(products)
+	return (
+		<div className={getBodyStyleClass()} style={getBodyStyle()}>
+			<div id='body'>
+				{products ?
+					products.products.map((product) => (
 
-	render() {
-		console.log(this.props.products);
-		return (
-			<div className={this.getBodyStyleClass()} style={this.getBodyStyle()}>
-				<div id='body'>
-					{this.props.products ?
-						this.props.products.map((product) => (
-
-							<Product
-								key={product.id}
-								product={product}
-								addToCartHandler={this.props.addToCartHandler}
-							/>
-						))
-						:
-						<ProductSkeleton />
-					}
-				</div>
+						<Product
+							key={product.id}
+							product={product}
+							// addToCartHandler={this.props.addToCartHandler}
+						/>
+					))
+					:
+					<ProductSkeleton />
+				}
 			</div>
-		);
-	}
+		</div>
+	);
 }
